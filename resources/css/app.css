@@ -1,0 +1,374 @@
+/* =========================================================
+   CHARLESACADEMY — DESIGN SYSTEM
+   Tailwind CSS v4 + shadcn/ui
+   Fonts: Fredoka + DM Sans
+   Light / Dark Mode
+   ========================================================= */
+
+/* ---------- FONTS ---------- */
+
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@400;500;600;700&display=swap");
+
+/* ---------- FRAMEWORK ---------- */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@source "../views";
+@source "../js";
+@source "../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php";
+
+@custom-variant dark (&:is(.dark *));
+
+/* =========================================================
+   TAILWIND V4 — SEMANTIC TOKENS
+   ========================================================= */
+
+@theme inline {
+    /* Typography */
+    --font-sans: "DM Sans", ui-sans-serif, system-ui, sans-serif;
+    --font-display: "Fredoka", ui-sans-serif, sans-serif;
+    --font-reading: "DM Sans", ui-sans-serif, sans-serif;
+
+    /* Radius */
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+    --radius-2xl: calc(var(--radius) + 8px);
+    --radius-3xl: calc(var(--radius) + 16px);
+
+    /* Core shadcn */
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    /* Charts */
+    --color-chart-1: var(--chart-1);
+    --color-chart-2: var(--chart-2);
+    --color-chart-3: var(--chart-3);
+    --color-chart-4: var(--chart-4);
+    --color-chart-5: var(--chart-5);
+
+    /* Sidebar */
+    --color-sidebar: var(--sidebar);
+    --color-sidebar-foreground: var(--sidebar-foreground);
+    --color-sidebar-primary: var(--sidebar-primary);
+    --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+    --color-sidebar-accent: var(--sidebar-accent);
+    --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+    --color-sidebar-border: var(--sidebar-border);
+    --color-sidebar-ring: var(--sidebar-ring);
+
+    /* CharlesAcademy extensions */
+    --color-brand: var(--brand);
+    --color-brand-foreground: var(--brand-foreground);
+    --color-brand-soft: var(--brand-soft);
+    --color-brand-soft-foreground: var(--brand-soft-foreground);
+    --color-surface: var(--surface);
+    --color-surface-raised: var(--surface-raised);
+
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-info: var(--info);
+    --color-info-foreground: var(--info-foreground);
+}
+
+/* =========================================================
+   LIGHT MODE — CHARLESACADEMY
+   ========================================================= */
+
+:root {
+    color-scheme: light;
+
+    --radius: 0.75rem;
+
+    /* Brand */
+    --brand: #038259;
+    --brand-foreground: #ffffff;
+    --brand-soft: #e8f7ee;
+    --brand-soft-foreground: #075c42;
+
+    /* Page */
+    --background: #ffffff;
+    --foreground: #1f2937;
+
+    /* Elevated surfaces */
+    --surface: #f7faf8;
+    --surface-raised: #ffffff;
+
+    /* Cards */
+    --card: #ffffff;
+    --card-foreground: #1f2937;
+
+    /* Popover / Dropdown */
+    --popover: #ffffff;
+    --popover-foreground: #1f2937;
+
+    /* Primary — Emerald */
+    --primary: #038259;
+    --primary-foreground: #ffffff;
+
+    /* Secondary — Mint */
+    --secondary: #e8f7ee;
+    --secondary-foreground: #075c42;
+
+    /* Muted */
+    --muted: #f1f5f3;
+    --muted-foreground: #52635c;
+
+    /* Accent */
+    --accent: #e8f7ee;
+    --accent-foreground: #075c42;
+
+    /* Error */
+    --destructive: #b42336;
+    --destructive-foreground: #ffffff;
+
+    /* Lines and focus */
+    --border: #dbe6df;
+    --input: #c6d5cb;
+    --ring: #038259;
+
+    /* Status */
+    --success: #087443;
+    --success-foreground: #ffffff;
+
+    --warning: #a35a00;
+    --warning-foreground: #ffffff;
+
+    --info: #1d4ed8;
+    --info-foreground: #ffffff;
+
+    /* Charts */
+    --chart-1: #038259;
+    --chart-2: #2563eb;
+    --chart-3: #a35a00;
+    --chart-4: #8b5cf6;
+    --chart-5: #be3e65;
+
+    /* Sidebar */
+    --sidebar: #f7faf8;
+    --sidebar-foreground: #1f2937;
+
+    --sidebar-primary: #038259;
+    --sidebar-primary-foreground: #ffffff;
+
+    --sidebar-accent: #e8f7ee;
+    --sidebar-accent-foreground: #075c42;
+
+    --sidebar-border: #dbe6df;
+    --sidebar-ring: #038259;
+}
+
+/* =========================================================
+   DARK MODE — DEEP EMERALD
+   ========================================================= */
+
+.dark {
+    color-scheme: dark;
+
+    /* Brand */
+    --brand: #22c58b;
+    --brand-foreground: #052b1e;
+    --brand-soft: #123e30;
+    --brand-soft-foreground: #8de9c3;
+
+    /* Page: deep green / charcoal */
+    --background: #0b1512;
+    --foreground: #edf7f1;
+
+    /* Surfaces */
+    --surface: #101e18;
+    --surface-raised: #1a3026;
+
+    /* Cards */
+    --card: #14251d;
+    --card-foreground: #edf7f1;
+
+    /* Popovers */
+    --popover: #1a3026;
+    --popover-foreground: #edf7f1;
+
+    /* Primary — luminous emerald */
+    --primary: #22c58b;
+    --primary-foreground: #052b1e;
+
+    /* Secondary */
+    --secondary: #1b3529;
+    --secondary-foreground: #e0f8e9;
+
+    /* Muted */
+    --muted: #1a2d24;
+    --muted-foreground: #b3c8bb;
+
+    /* Accent */
+    --accent: #214334;
+    --accent-foreground: #c7f8df;
+
+    /* Error */
+    --destructive: #ff7383;
+    --destructive-foreground: #3e0814;
+
+    /* Lines and focus */
+    --border: #30473a;
+    --input: #466353;
+    --ring: #51dfaa;
+
+    /* Status */
+    --success: #4cdb9b;
+    --success-foreground: #082d1e;
+
+    --warning: #f6bd60;
+    --warning-foreground: #412500;
+
+    --info: #93b5ff;
+    --info-foreground: #0c245c;
+
+    /* Charts */
+    --chart-1: #22c58b;
+    --chart-2: #75a7ff;
+    --chart-3: #f6bd60;
+    --chart-4: #c4a1ff;
+    --chart-5: #ff91b0;
+
+    /* Sidebar */
+    --sidebar: #101e18;
+    --sidebar-foreground: #edf7f1;
+
+    --sidebar-primary: #22c58b;
+    --sidebar-primary-foreground: #052b1e;
+
+    --sidebar-accent: #214334;
+    --sidebar-accent-foreground: #c7f8df;
+
+    --sidebar-border: #30473a;
+    --sidebar-ring: #51dfaa;
+}
+
+/* =========================================================
+   BASE STYLES
+   ========================================================= */
+
+@layer base {
+    * {
+        @apply border-border;
+    }
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    body {
+        @apply bg-background text-foreground font-sans;
+        min-height: 100vh;
+        font-synthesis: none;
+        -webkit-font-smoothing: antialiased;
+        text-rendering: optimizeLegibility;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-display;
+        letter-spacing: -0.025em;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+        font: inherit;
+    }
+
+    button:not(:disabled),
+    [role="button"]:not([aria-disabled="true"]) {
+        cursor: pointer;
+    }
+
+    :focus-visible {
+        outline: 2px solid var(--ring);
+        outline-offset: 3px;
+    }
+
+    ::selection {
+        background: var(--brand-soft);
+        color: var(--brand-soft-foreground);
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html {
+            scroll-behavior: auto;
+        }
+    }
+}
+
+@layer components {
+    .home-dot-grid {
+        background-color: color-mix(
+            in srgb,
+            var(--foreground) 3%,
+            var(--background)
+        );
+        background-image: radial-gradient(
+            circle,
+            color-mix(in srgb, var(--foreground) 22%, var(--background)) 1.5px,
+            transparent 1.5px
+        );
+        background-size: 35px 35px;
+        background-repeat: repeat;
+    }
+}
+
+@keyframes click-ripple {
+    0% {
+        opacity: 0.85;
+        transform: translate(-50%, -50%) scale(0.35);
+        box-shadow: 0 0 0 0 rgb(3 130 89 / 20%);
+    }
+
+    65% {
+        opacity: 0.45;
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(2.6);
+        box-shadow: 0 0 0 12px rgb(3 130 89 / 0%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .animate-\[click-ripple_400ms_ease-out_forwards\] {
+        animation: none;
+    }
+}
