@@ -22,10 +22,6 @@ const footerLinks = [
         ],
     },
     {
-        title: 'Ressources',
-        links: ['Blog', 'Guide de démarrage', 'FAQ', 'Support'],
-    },
-    {
         title: 'Entreprise',
         links: ['À propos', 'Contact', 'Partenaires'],
     },

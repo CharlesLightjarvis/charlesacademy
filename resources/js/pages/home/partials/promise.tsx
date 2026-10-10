@@ -1,34 +1,27 @@
-import { BookOpen, Compass, Pencil, TrendingUp } from "lucide-react";
+import { BookOpen, Languages, MessageCircle } from "lucide-react";
 import { Card } from "@/components/ui/card";
 
 const promises = [
     {
         number: "01",
         icon: BookOpen,
-        title: "Comprendre",
+        title: "Grammaire",
         description:
-            "Des explications claires et des exemples concrets pour saisir chaque notion.",
+            "Comprends une règle dans une phrase, puis essaie de l'utiliser dans un nouvel exemple.",
     },
     {
         number: "02",
-        icon: Pencil,
-        title: "Pratiquer",
+        icon: Languages,
+        title: "Vocabulaire",
         description:
-            "Des exercices pour essayer, se tromper et transformer la théorie en réflexes.",
+            "Découvre des mots utiles en contexte et réemploie-les pour parler de ce qui te concerne.",
     },
     {
         number: "03",
-        icon: TrendingUp,
-        title: "Progresser",
+        icon: MessageCircle,
+        title: "Expression orale",
         description:
-            "Un apprentissage étape par étape, sans perdre le fil de ce que tu sais déjà.",
-    },
-    {
-        number: "04",
-        icon: Compass,
-        title: "Garder le cap",
-        description:
-            "La liberté de revenir sur une leçon et d’avancer à ton propre rythme.",
+            "Écoute, réponds à voix haute et gagne peu à peu en aisance dans les échanges.",
     },
 ] as const;
 
@@ -45,18 +38,18 @@ export default function PromiseSection() {
                         id="promise-heading"
                         className="mt-6 font-display text-5xl leading-[1.1] font-semibold tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
                     >
-                        L’allemand devient{" "}
+                        Trois façons de{" "}
                         <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
-                            plus simple.
+                            pratiquer.
                         </span>
                     </h2>
                     <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-pretty text-muted-foreground">
-                        Comprendre, essayer, avancer : quatre repères pour
-                        apprendre avec confiance, à ton rythme.
+                        À chaque niveau, travaille les mêmes essentiels : la
+                        grammaire, le vocabulaire et l’expression orale.
                     </p>
                 </div>
 
-                <div className="mx-auto mt-20 grid max-w-6xl gap-x-20 gap-y-12 lg:grid-cols-2 lg:gap-y-16">
+                <div className="mx-auto mt-16 grid max-w-7xl gap-x-8 gap-y-12 lg:grid-cols-3">
                     {promises.map((promise) => {
                         const Icon = promise.icon;
 

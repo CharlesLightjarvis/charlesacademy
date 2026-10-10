@@ -1,16 +1,12 @@
+import { Link, usePage } from "@inertiajs/react";
 import { ArrowRight, ArrowUpRight, Check, Sparkles } from "lucide-react";
 
-type FinalCTAProps = {
-    primaryHref?: string;
-    secondaryHref?: string;
-    enrollmentOpen?: boolean;
-};
+import { dashboard, login, register } from "@/routes";
+import type { Auth } from "@/types";
 
-export default function FinalCTA({
-    primaryHref = "/register",
-    secondaryHref = "#parcours",
-    enrollmentOpen = false,
-}: FinalCTAProps) {
+export default function FinalCTA() {
+    const { auth } = usePage<{ auth: Auth }>().props;
+
     return (
         <section
             id="commencer"
@@ -44,7 +40,7 @@ export default function FinalCTA({
 
                     <div className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-4 py-2 text-xs font-semibold tracking-[0.15em] text-white/90">
                         <Sparkles className="size-3.5" />
-                        TON PROCHAIN CHAPITRE COMMENCE ICI
+                        UN PEU DE PRATIQUE, CHAQUE JOUR
                     </div>
 
                     {/* GERMAN MICRO HEADLINE */}
@@ -53,7 +49,7 @@ export default function FinalCTA({
                         lang="de"
                         className="mt-8 font-display text-xl font-medium text-[#C8F7DF] sm:text-2xl"
                     >
-                        Dein nächstes Kapitel.
+                        Übung macht den Meister.
                     </p>
 
                     {/* MAIN HEADLINE */}
@@ -62,9 +58,9 @@ export default function FinalCTA({
                         id="final-cta-heading"
                         className="mx-auto mt-5 max-w-5xl font-display text-[clamp(2.7rem,7vw,6.5rem)] font-semibold leading-[1.05] tracking-tight text-balance"
                     >
-                        Et si tout commençait{" "}
+                        Prêt à essayer{" "}
                         <span className="relative inline-block">
-                            maintenant ?
+                            en allemand ?
                             <svg
                                 aria-hidden="true"
                                 viewBox="0 0 420 24"
@@ -85,32 +81,30 @@ export default function FinalCTA({
                     {/* DESCRIPTION */}
 
                     <p className="mx-auto mt-9 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
-                        Un mot aujourd'hui. Une phrase demain. Et petit à petit,
-                        une nouvelle langue qui devient familière.
+                        Une règle à appliquer, des mots à réutiliser, une phrase
+                        à dire à voix haute. Commence à ton niveau.
                     </p>
 
                     {/* CTAS */}
 
                     <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-                        <a
-                            href={enrollmentOpen ? primaryHref : secondaryHref}
+                        <Link
+                            href={auth.user ? dashboard() : register()}
                             className="group inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-4 text-base font-bold text-[#038259] shadow-xl shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:bg-[#E8F7EE] hover:shadow-2xl active:translate-y-0 motion-reduce:transform-none sm:w-auto"
                         >
-                            {enrollmentOpen
-                                ? "Créer mon compte"
-                                : "Découvrir les parcours"}
+                            {auth.user ? "Accéder à mon espace" : "Créer mon compte"}
 
                             <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
-                        </a>
+                        </Link>
 
-                        {enrollmentOpen && (
-                            <a
-                                href={secondaryHref}
+                        {!auth.user && (
+                            <Link
+                                href={login()}
                                 className="group inline-flex min-h-14 w-full items-center justify-center gap-2 rounded-full border border-white/35 px-7 py-4 text-sm font-semibold text-white transition-colors hover:bg-white/10 sm:w-auto"
                             >
-                                Explorer les niveaux
+                                J'ai déjà un compte
                                 <ArrowUpRight className="size-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                            </a>
+                            </Link>
                         )}
                     </div>
 

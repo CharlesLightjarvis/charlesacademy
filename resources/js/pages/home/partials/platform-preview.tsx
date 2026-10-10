@@ -15,7 +15,7 @@ import {
 
 const navigation = [
     { id: "dashboard", label: "Tableau de bord", icon: LayoutDashboard },
-    { id: "courses", label: "Catalogue", icon: BookOpen },
+    { id: "courses", label: "Activités", icon: BookOpen },
     { id: "lesson", label: "Une leçon", icon: BookText },
     { id: "quiz", label: "Quiz", icon: CircleHelp },
     { id: "progress", label: "Progression", icon: TrendingUp },
@@ -91,15 +91,15 @@ export default function PlatformPreview() {
                         id="platform-heading"
                         className="mt-6 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
                     >
-                        Un espace pour apprendre.{" "}
+                        Un espace pour pratiquer.{" "}
                         <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
                             À ton rythme.
                         </span>
                     </h2>
 
                     <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                        Découvre les différents espaces d'apprentissage à
-                        travers cette démonstration interactive.
+                        Explore un aperçu interactif des activités et de ta
+                        progression, à ton rythme.
                     </p>
                 </div>
 
@@ -229,7 +229,7 @@ export default function PlatformPreview() {
                                         <div className="flex flex-wrap items-end justify-between gap-4">
                                             <div>
                                                 <p className="text-sm text-muted-foreground">
-                                                    Parcours de découverte
+                                                    Tes premiers essais
                                                 </p>
 
                                                 <p className="mt-2 font-display text-5xl font-semibold text-primary">
@@ -290,15 +290,16 @@ export default function PlatformPreview() {
                             {view === "courses" && (
                                 <div>
                                     <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-                                        Catalogue
+                                        Activités
                                     </p>
 
                                     <h3 className="mt-3 font-display text-3xl font-semibold sm:text-4xl">
-                                        Qu'allons-nous apprendre ?
+                                        Que veux-tu pratiquer ?
                                     </h3>
 
                                     <p className="mt-2 text-sm text-muted-foreground">
-                                        Explore quelques exemples de parcours.
+                                        Choisis un sujet et un niveau pour
+                                        découvrir des activités adaptées.
                                     </p>
 
                                     <div

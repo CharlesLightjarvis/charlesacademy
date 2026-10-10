@@ -1,6 +1,7 @@
 import { Head } from "@inertiajs/react";
 import Hero from "./partials/hero";
 import LearningUniverses from "./partials/learning-universes";
+import OralPractice from "./partials/oral-practice";
 import PromiseSection from "./partials/promise";
 import TeachingMethod from "./partials/teaching-method";
 import PlatformPreview from "./partials/platform-preview";
@@ -16,7 +17,7 @@ export default function Home() {
             <Hero />
             <PromiseSection />
             <LearningUniverses />
-            <TeachingMethod />
+            <OralPractice />
             <PlatformPreview />
             <LearningPath />
             <TrustSection />

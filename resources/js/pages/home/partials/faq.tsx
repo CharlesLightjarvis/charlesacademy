@@ -1,5 +1,9 @@
+import { Link, usePage } from "@inertiajs/react";
 import { useState } from "react";
 import { ArrowUpRight, ChevronDown, HelpCircle } from "lucide-react";
+
+import { dashboard, register } from "@/routes";
+import type { Auth } from "@/types";
 
 /* =========================================================
    CHARLESACADEMY — FAQ
@@ -14,33 +18,34 @@ type FAQItem = {
 
 const faqs: FAQItem[] = [
     {
-        question: "Quels niveaux d'allemand sont proposés ?",
-        answer: "CharlesAcademy s'appuie sur une progression inspirée du Cadre européen commun de référence pour les langues (CECRL). Les niveaux A1, A2, B1 et B2 peuvent servir de repères pour comprendre les différentes étapes de l'apprentissage. Les parcours effectivement accessibles seront précisés dans le catalogue.",
+        question: "À quels niveaux puis-je pratiquer ?",
+        answer: "Les niveaux A1, A2, B1 et B2 te servent de repères. À chaque niveau, tu retrouves de la grammaire, du vocabulaire et de l'expression orale avec une difficulté adaptée.",
     },
     {
         question: "Comment s'inscrire sur CharlesAcademy ?",
-        answer: "L'inscription se fera depuis l'espace dédié sur la plateforme. Les modalités de création de compte et d'accès aux cours seront précisées lors de l'ouverture des inscriptions.",
+        answer: "Utilise le bouton d'inscription en haut de la page pour créer ton compte. Tu peux aussi explorer les aperçus interactifs de cette page sans compte.",
     },
     {
-        question: "Comment se déroulent les cours ?",
-        answer: "L'approche pédagogique présentée par CharlesAcademy repose sur des explications progressives, des exemples concrets et des exercices pour mettre les notions en pratique. Le contenu exact de chaque cours sera détaillé dans sa présentation.",
+        question: "Qu'est-ce que je peux pratiquer ?",
+        answer: "Tu peux travailler trois essentiels : comprendre et appliquer la grammaire, utiliser le vocabulaire en contexte et essayer de t'exprimer à l'oral. Les activités partent d'exemples concrets et t'invitent à répondre.",
     },
     {
         question: "Puis-je apprendre depuis mon téléphone ?",
-        answer: "CharlesAcademy est conçu avec une interface adaptée aux différents formats d'écran. Les fonctionnalités précises disponibles sur mobile seront confirmées lors de la mise en ligne de l'espace apprenant.",
+        answer: "Oui, le site s'adapte aux écrans de téléphone. Tu peux notamment explorer les exemples de pratique depuis ton mobile.",
     },
     {
-        question: "Les cours sont-ils gratuits ou payants ?",
-        answer: "Les tarifs et les éventuelles ressources gratuites seront indiqués clairement avant toute inscription à une offre payante. Aucun achat ne doit être nécessaire pour consulter les informations tarifaires d'une formation.",
+        question: "Faut-il payer pour utiliser CharlesAcademy ?",
+        answer: "Les conditions d'accès et les éventuels tarifs seront affichés clairement avant toute souscription. Les aperçus interactifs de cette page sont accessibles librement.",
     },
     {
         question: "Comment fonctionne la progression ?",
-        answer: "L'apprentissage suit une logique progressive : découvrir une notion, la comprendre, la pratiquer et consolider ses acquis. Les outils de suivi et les modalités de progression effectivement disponibles seront présentés dans l'espace apprenant.",
+        answer: "Tu avances en essayant, en lisant les explications et en revenant sur ce qui te pose problème. Les repères A1 à B2 t'aident à choisir des activités à la bonne difficulté.",
     },
 ];
 
 export default function FAQ() {
     const [openIndex, setOpenIndex] = useState<number | null>(0);
+    const { auth } = usePage<{ auth: Auth }>().props;
 
     function toggleFAQ(index: number) {
         setOpenIndex((previous) => (previous === index ? null : index));
@@ -69,8 +74,8 @@ export default function FAQ() {
                     </h2>
 
                     <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                        Niveaux, inscription, cours, tarifs et fonctionnement :
-                        retrouve ici les réponses aux questions essentielles.
+                        Niveaux, grammaire, vocabulaire, oral et accès : retrouve
+                        ici les réponses aux questions essentielles.
                     </p>
                 </div>
 
@@ -168,22 +173,22 @@ export default function FAQ() {
 
                         <div>
                             <p className="font-display text-base font-semibold text-foreground">
-                                Tu as encore une question ?
+                                Tu veux continuer ?
                             </p>
 
                             <p className="mt-0.5 text-sm text-muted-foreground">
-                                Contacte-nous pour en savoir plus.
+                                Crée un compte ou ouvre ton espace personnel.
                             </p>
                         </div>
                     </div>
 
-                    <a
-                        href="#contact"
+                    <Link
+                        href={auth.user ? dashboard() : register()}
                         className="group inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-foreground"
                     >
-                        Nous contacter
+                        {auth.user ? "Mon espace" : "Créer mon compte"}
                         <ArrowUpRight className="size-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
-                    </a>
+                    </Link>
                 </div>
             </div>
         </section>

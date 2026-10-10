@@ -10,7 +10,7 @@ const Logo: React.FC<LogoProps> = ({ className = '', style = {} }) => {
         <img
             src="/images/logos/CharlesAcademyTextLogo.png"
             alt="CharlesAcademy"
-            className={`block h-auto w-44 object-contain ${className}`}
+            className={`block h-auto object-contain ${className || 'w-44'}`}
             style={style}
         />
     );

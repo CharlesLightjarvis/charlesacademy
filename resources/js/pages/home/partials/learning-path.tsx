@@ -106,16 +106,16 @@ export default function LearningPaths() {
                         id="paths-heading"
                         className="mt-6 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
                     >
-                        À chaque niveau,{" "}
+                        Même pratique.{" "}
                         <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
-                            son ambition.
+                            À ton niveau.
                         </span>
                     </h2>
 
                     <p className="mx-auto mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-                        Du premier mot aux conversations plus complexes,
-                        découvre les grandes étapes de l'apprentissage de
-                        l'allemand.
+                        Du A1 au B2, tu pratiques la grammaire, le vocabulaire
+                        et l'expression orale avec des activités qui évoluent
+                        avec toi.
                     </p>
                 </div>
 

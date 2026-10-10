@@ -289,15 +289,15 @@ export default function LearningUniverses() {
                         id="universes-heading"
                         className="mt-6 font-display text-5xl leading-[1.1] font-semibold tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
                     >
-                        La Théorie, c’est bien.{" "}
+                        Comprendre, c’est bien.{" "}
                         <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
-                            Pratiquer, c’est mieux.
+                            Essayer, c’est mieux.
                         </span>
                     </h2>
 
                     <p className="mx-auto mt-7 max-w-2xl text-lg leading-relaxed text-muted-foreground">
-                        Découvre une expérience d'apprentissage qui prend vie
-                        sous tes yeux.
+                        Choisis une activité, tente une réponse et découvre
+                        l'explication. La pratique commence ici.
                     </p>
                 </div>
 
@@ -305,7 +305,7 @@ export default function LearningUniverses() {
 
                 <div
                     role="group"
-                    aria-label="Choisir un univers"
+                    aria-label="Choisir une activité"
                     className="mt-14 flex flex-wrap justify-center gap-x-6 gap-y-3 border-b border-border/70 pb-5"
                 >
                     {lessons.map((item, i) => (
@@ -343,7 +343,7 @@ export default function LearningUniverses() {
                             </div>
 
                             <span className="text-xs font-semibold text-muted-foreground">
-                                CharlesAcademy — Learning Studio
+                                CharlesAcademy — Atelier pratique
                             </span>
 
                             <span className="w-8" />
@@ -579,7 +579,7 @@ export default function LearningUniverses() {
                                             ((index + 1) / lessons.length) *
                                                 100,
                                         )}
-                                        % du parcours démo
+                                        % de la démo
                                     </span>
                                 </div>
 

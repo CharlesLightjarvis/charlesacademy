@@ -36,7 +36,7 @@ const commitments: Commitment[] = [
         number: "03",
         title: "Avancer progressivement",
         description:
-            "Construire les acquis étape par étape, avec des objectifs compréhensibles et une difficulté adaptée à chaque parcours.",
+            "Construire les acquis étape par étape, avec des objectifs compréhensibles et une difficulté adaptée à chaque niveau.",
         icon: GraduationCap,
     },
 ];
@@ -78,7 +78,7 @@ export default function TrustSection() {
 
                 <div className="mx-auto max-w-5xl text-center">
                     <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
-                        Notre engagement pédagogique
+                        Une approche concrète
                     </p>
 
                     <h2
@@ -108,7 +108,7 @@ export default function TrustSection() {
                     <div className="lg:sticky lg:top-24">
                         <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
                             <HeartHandshake className="size-4" />
-                            Notre philosophie
+                            L'idée derrière CharlesAcademy
                         </div>
 
                         <p className="mt-6 max-w-lg font-display text-3xl font-semibold leading-[1.25] tracking-tight text-foreground sm:text-4xl">
@@ -117,9 +117,9 @@ export default function TrustSection() {
                         </p>
 
                         <p className="mt-5 max-w-md text-base leading-relaxed text-muted-foreground">
-                            Notre démarche consiste à relier les explications
-                            aux exemples et à la pratique, pour aider chacun à
-                            comprendre ce qu'il apprend.
+                            Relier les explications aux exemples et à la
+                            pratique t'aide à comprendre une notion, puis à
+                            l'utiliser dans tes propres phrases.
                         </p>
 
                         <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3">

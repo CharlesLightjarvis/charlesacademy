@@ -31,8 +31,9 @@ export default function Hero() {
                     </h1>
 
                     <p className="mt-10 max-w-2xl font-sans text-lg leading-relaxed text-pretty text-muted-foreground sm:text-xl">
-                        Des cours d’allemand expliqués avec clarté, dans un
-                        espace pensé pour apprendre et progresser à ton rythme.
+                        Grammaire, vocabulaire et expression orale : pratique
+                        l’allemand à ton niveau, avec des activités pour
+                        comprendre, essayer et oser t’exprimer.
                     </p>
 
                     <div className="mt-10 flex flex-wrap justify-center gap-3">
@@ -161,7 +162,7 @@ export default function Hero() {
                             Ose parler allemand
                         </p>
                         <p className="mt-3 text-sm text-muted-foreground">
-                            Une langue se découvre aussi en la pratiquant.
+                            Écoute, répète et trouve tes propres mots.
                         </p>
                     </Card>
                 </motion.div>

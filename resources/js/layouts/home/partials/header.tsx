@@ -1,142 +1,125 @@
-import { Link, usePage } from '@inertiajs/react';
-import React from 'react';
-import { createPortal } from 'react-dom';
-import { Button } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { dashboard, login, register } from '@/routes';
-import type { Auth } from '@/types';
-import Logo from './logo';
-import { MenuToggleIcon } from './menu-toggle-icon';
-import ThemeToggle from './ThemeToggle';
-import { useScroll } from './use-scroll';
+import { Link, usePage } from "@inertiajs/react";
+import { useEffect, useState } from "react";
 
-/* ------------------------------------------------------------------ */
-/* Header                                                             */
-/* ------------------------------------------------------------------ */
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+import { dashboard, login, register } from "@/routes";
+import type { Auth } from "@/types";
+
+import Logo from "./logo";
+import { MenuToggleIcon } from "./menu-toggle-icon";
+import ThemeToggle from "./ThemeToggle";
+import { useScroll } from "./use-scroll";
 
 export function Header() {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const scrolled = useScroll(10);
     const { auth } = usePage<{ auth: Auth }>().props;
+    const { url } = usePage();
 
-    React.useEffect(() => {
-        document.body.style.overflow = open ? 'hidden' : '';
+    useEffect(() => setOpen(false), [url]);
 
-        return () => {
-            document.body.style.overflow = '';
-        };
+    useEffect(() => {
+        if (!open) {
+            return;
+        }
+
+        function closeOnEscape(event: KeyboardEvent) {
+            if (event.key === "Escape") {
+                setOpen(false);
+            }
+        }
+
+        document.addEventListener("keydown", closeOnEscape);
+
+        return () => document.removeEventListener("keydown", closeOnEscape);
     }, [open]);
 
     return (
         <header
             className={cn(
-                'sticky top-0 z-50 w-full border-b border-transparent',
-                {
-                    'border-border bg-background': scrolled,
-                },
+                "sticky top-0 z-50 w-full border-b border-transparent transition-colors duration-300",
+                scrolled &&
+                    "border-border bg-background/95 backdrop-blur-lg supports-[backdrop-filter]:bg-background/85",
             )}
         >
-            <nav className="relative flex h-14 w-full items-center px-4 lg:px-6">
-                {/* logo */}
-                <div className="flex items-center justify-start">
-                    <Link href="/">
-                        <Logo />
-                    </Link>
-                </div>
+            <nav
+                aria-label="Navigation principale"
+                className="mx-auto flex h-14 w-full max-w-[1600px] items-center gap-3 px-4 lg:px-6"
+            >
+                <Link
+                    href="/"
+                    aria-label="CharlesAcademy — Accueil"
+                    className="shrink-0"
+                    onClick={() => setOpen(false)}
+                >
+                    <Logo className="w-28 sm:w-44" />
+                </Link>
 
-                {/* CTA — droite */}
-                <div className="ml-auto hidden items-center justify-end gap-2 lg:flex">
+                <div className="ml-auto hidden items-center gap-2 sm:flex">
                     {auth.user ? (
-                        <Button variant="secondary" asChild>
+                        <Button size="sm" asChild>
                             <Link href={dashboard()}>Mon espace</Link>
                         </Button>
                     ) : (
                         <>
-                            <Button variant="secondary" asChild>
+                            <Button variant="secondary" size="sm" asChild>
                                 <Link href={login()}>Connexion</Link>
                             </Button>
-                            <Button variant="default" asChild>
+                            <Button size="sm" asChild>
                                 <Link href={register()}>Créer un compte</Link>
                             </Button>
                         </>
                     )}
+
                     <ThemeToggle />
                 </div>
 
-                {/* burger mobile */}
-                <Button
-                    size="icon"
-                    variant="outline"
-                    onClick={() => setOpen(!open)}
-                    className="ml-auto lg:hidden"
-                    aria-expanded={open}
-                    aria-controls="mobile-menu"
-                    aria-label="Toggle menu"
-                >
-                    <MenuToggleIcon
-                        open={open}
-                        className="size-5"
-                        duration={300}
-                    />
-                </Button>
+                <div className="ml-auto flex items-center gap-2 sm:hidden">
+                    <ThemeToggle />
+                    <Button
+                        type="button"
+                        size="icon"
+                        variant="outline"
+                        aria-expanded={open}
+                        aria-controls="mobile-account-menu"
+                        aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+                        onClick={() => setOpen((previous) => !previous)}
+                    >
+                        <MenuToggleIcon open={open} className="size-5" duration={300} />
+                    </Button>
+                </div>
             </nav>
 
-            <MobileMenu open={open} auth={auth} />
-        </header>
-    );
-}
-
-/* ------------------------------------------------------------------ */
-/* Menu mobile                                                        */
-/* ------------------------------------------------------------------ */
-
-function MobileMenu({ open, auth }: { open: boolean; auth: Auth }) {
-    if (!open || typeof window === 'undefined') {
-        return null;
-    }
-
-    return createPortal(
-        <div
-            id="mobile-menu"
-            className="fixed top-14 right-0 bottom-0 left-0 z-40 flex flex-col overflow-hidden border-y border-border bg-background lg:hidden"
-        >
-            <div
-                data-slot={open ? 'open' : 'closed'}
-                className="flex size-full flex-col justify-between overflow-y-auto p-4 ease-out data-[slot=open]:animate-in data-[slot=open]:zoom-in-97"
-            >
-                <div className="flex flex-col gap-3 pt-4">
-                    <div className="flex items-center justify-between px-1">
-                        <span className="text-xs font-medium text-foreground/40">
-                            Apparence
-                        </span>
-                        <ThemeToggle />
+            {open && (
+                <div
+                    id="mobile-account-menu"
+                    className="absolute inset-x-0 top-full border-b border-border bg-background p-4 shadow-lg sm:hidden"
+                >
+                    <div className="mx-auto flex max-w-[1600px] flex-col gap-2">
+                        {auth.user ? (
+                            <Button asChild>
+                                <Link href={dashboard()} onClick={() => setOpen(false)}>
+                                    Mon espace
+                                </Link>
+                            </Button>
+                        ) : (
+                            <>
+                                <Button asChild>
+                                    <Link href={register()} onClick={() => setOpen(false)}>
+                                        Créer un compte
+                                    </Link>
+                                </Button>
+                                <Button variant="secondary" asChild>
+                                    <Link href={login()} onClick={() => setOpen(false)}>
+                                        Connexion
+                                    </Link>
+                                </Button>
+                            </>
+                        )}
                     </div>
-
-                    {auth.user ? (
-                        <Button variant="secondary" className="w-full" asChild>
-                            <Link href={dashboard()}>Mon espace</Link>
-                        </Button>
-                    ) : (
-                        <>
-                            <Button
-                                variant="secondary"
-                                className="w-full"
-                                asChild
-                            >
-                                <Link href={login()}>Connexion</Link>
-                            </Button>
-                            <Button
-                                variant="default"
-                                className="w-full"
-                                asChild
-                            >
-                                <Link href={register()}>Créer un compte</Link>
-                            </Button>
-                        </>
-                    )}
                 </div>
-            </div>
-        </div>,
-        document.body,
+            )}
+        </header>
     );
 }
