@@ -6,13 +6,14 @@ namespace App\Enums;
 
 enum PermissionEnum: string
 {
-    // Administration
     case ViewAdminDashboard = 'view.admin-dashboard';
-    case ViewAdminSessions = 'view.admin-sessions';
-    case ViewAdminTeachers = 'view.admin-teachers';
-    case ViewAdminSalaries = 'view.admin-salaries';
-    case ViewTrainingDashboard = 'view.training-dashboard';
-
-        // Étudiant
-    case ViewStudentDashboard = 'view.student-dashboard';
+    case ViewLearnerDashboard = 'view.learner-dashboard';
+    case ViewLearning = 'view.learning';
+    case PracticeGrammar = 'practice.grammar';
+    case PracticeVocabulary = 'practice.vocabulary';
+    case PracticeOral = 'practice.oral';
+    case TakeQuizzes = 'take.quizzes';
+    case ViewProgress = 'view.progress';
+    case ManageContent = 'manage.content';
+    case ManageUsers = 'manage.users';
 }

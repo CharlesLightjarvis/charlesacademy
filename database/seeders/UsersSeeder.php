@@ -13,9 +13,13 @@ final class UsersSeeder extends Seeder
 {
     public function run(): void
     {
+        if (! app()->environment(['local', 'testing'])) {
+            return;
+        }
+
         $users = [
-            ['role' => RoleEnum::Admin,   'name' => 'Admin',      'email' => 'admin@propulsion.test'],
-            ['role' => RoleEnum::Teacher, 'name' => 'Professeur', 'email' => 'teacher@propulsion.test'],
+            ['role' => RoleEnum::Admin, 'name' => 'Admin', 'email' => 'admin@charlesacademy.test'],
+            ['role' => RoleEnum::Learner, 'name' => 'Apprenant', 'email' => 'learner@charlesacademy.test'],
         ];
 
         foreach ($users as $entry) {

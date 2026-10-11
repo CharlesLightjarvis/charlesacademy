@@ -1,7 +1,6 @@
-import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid } from 'lucide-react';
+import { Link, usePage } from '@inertiajs/react';
+import { Layers, LayoutGrid } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
-import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
 import { NavUser } from '@/components/nav-user';
 import {
@@ -14,30 +13,38 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
-import type { NavItem } from '@/types';
+import { dashboard as adminDashboard } from '@/routes/admin';
+import { index as adminModulesIndex } from '@/routes/admin/modules';
+import { dashboard as learnerDashboard } from '@/routes/learner';
+import type { Auth, NavItem } from '@/types';
 
-const mainNavItems: NavItem[] = [
+const mainNavItems: (NavItem & { permission: string })[] = [
     {
-        title: 'Dashboard',
-        href: dashboard(),
+        title: 'Mon espace',
+        href: adminDashboard(),
         icon: LayoutGrid,
-    },
-];
-
-const footerNavItems: NavItem[] = [
-    {
-        title: 'Repository',
-        href: 'https://github.com/laravel/react-starter-kit',
-        icon: FolderGit2,
+        permission: 'view.admin-dashboard',
     },
     {
-        title: 'Documentation',
-        href: 'https://laravel.com/docs/starter-kits#react',
-        icon: BookOpen,
+        title: 'Modules',
+        href: adminModulesIndex(),
+        icon: Layers,
+        permission: 'manage.content',
+    },
+    {
+        title: 'Mon espace',
+        href: learnerDashboard(),
+        icon: LayoutGrid,
+        permission: 'view.learner-dashboard',
     },
 ];
 
 export function AppSidebar() {
+    const { auth } = usePage<{ auth: Auth }>().props;
+    const visibleNavItems = mainNavItems.filter((item) =>
+        auth.permissions.includes(item.permission),
+    );
+
     return (
         <Sidebar collapsible="icon" variant="inset">
             <SidebarHeader>
@@ -53,11 +60,10 @@ export function AppSidebar() {
             </SidebarHeader>
 
             <SidebarContent>
-                <NavMain items={mainNavItems} />
+                <NavMain items={visibleNavItems} />
             </SidebarContent>
 
             <SidebarFooter>
-                <NavFooter items={footerNavItems} className="mt-auto" />
                 <NavUser />
             </SidebarFooter>
         </Sidebar>

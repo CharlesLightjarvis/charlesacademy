@@ -7,15 +7,13 @@ namespace App\Enums;
 enum RoleEnum: string
 {
     case Admin = 'admin';
-    case Teacher = 'teacher';
-    case Student = 'student';
+    case Learner = 'learner';
 
     public function label(): string
     {
         return match ($this) {
             self::Admin => 'Administrateur',
-            self::Teacher => 'Professeur',
-            self::Student => 'Étudiant',
+            self::Learner => 'Apprenant',
         };
     }
 
@@ -27,20 +25,29 @@ enum RoleEnum: string
         return match ($this) {
             self::Admin => [
                 PermissionEnum::ViewAdminDashboard,
-                PermissionEnum::ViewAdminSessions,
-                PermissionEnum::ViewAdminTeachers,
-                PermissionEnum::ViewAdminSalaries,
-                PermissionEnum::ViewTrainingDashboard,
+                PermissionEnum::PracticeGrammar,
+                PermissionEnum::PracticeVocabulary,
+                PermissionEnum::PracticeOral,
+                PermissionEnum::TakeQuizzes,
+                PermissionEnum::ViewProgress,
+                PermissionEnum::ManageContent,
+                PermissionEnum::ManageUsers,
             ],
-
-
-            self::Student => [PermissionEnum::ViewStudentDashboard,],
+            self::Learner => [
+                PermissionEnum::ViewLearnerDashboard,
+                PermissionEnum::ViewLearning,
+                PermissionEnum::PracticeGrammar,
+                PermissionEnum::PracticeVocabulary,
+                PermissionEnum::PracticeOral,
+                PermissionEnum::TakeQuizzes,
+                PermissionEnum::ViewProgress,
+            ],
         };
     }
 
     /** @return array<int, self> */
     public static function activeCases(): array
     {
-        return [self::Admin, self::Teacher, self::Student];
+        return self::cases();
     }
 }

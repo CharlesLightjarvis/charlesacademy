@@ -349,6 +349,263 @@
     }
 }
 
+/* =========================================================
+   LEÇONS MDX — RENDU FORMATÉ
+   Typographie de portée pour le contenu des leçons
+   (aperçu de l'éditeur admin + affichage étudiant).
+   Équivalent maison de @tailwindcss/typography : aucune
+   dépendance, calé sur le design system et ses tokens.
+   ========================================================= */
+
+.mdx-lesson {
+    color: var(--foreground);
+    font-family: var(--font-reading);
+    font-size: 0.9375rem;
+    line-height: 1.75;
+    overflow-wrap: break-word;
+}
+
+@media (min-width: 48rem) {
+    .mdx-lesson {
+        font-size: 1rem;
+    }
+}
+
+/* Rythme vertical entre les blocs de premier niveau.
+   La préflight de Tailwind remet les marges à zéro. */
+.mdx-lesson > * + * {
+    margin-top: 1.25rem;
+}
+
+/* Blocs imbriqués (dans li, blockquote, div JSX…) */
+.mdx-lesson li > *,
+.mdx-lesson blockquote > *,
+.mdx-lesson div > *,
+.mdx-lesson td > *,
+.mdx-lesson th > * {
+    margin-top: 0.75rem;
+}
+
+.mdx-lesson li > :first-child,
+.mdx-lesson blockquote > :first-child,
+.mdx-lesson div > :first-child,
+.mdx-lesson td > :first-child,
+.mdx-lesson th > :first-child {
+    margin-top: 0;
+}
+
+/* Les tuiles d'une grille de lettres ne prennent pas cette marge :
+   sinon la grille se désaligne ligne par ligne. */
+.mdx-lesson .mdx-letters > * {
+    margin-top: 0;
+}
+
+/* ---------- Titres : Fredoka (font-display, règle base) ---------- */
+
+.mdx-lesson h1,
+.mdx-lesson h2,
+.mdx-lesson h3,
+.mdx-lesson h4,
+.mdx-lesson h5,
+.mdx-lesson h6 {
+    margin-top: 0;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+}
+
+.mdx-lesson h1 {
+    font-size: clamp(1.875rem, 1.4rem + 2vw, 2.5rem);
+}
+
+.mdx-lesson h2 {
+    font-size: 1.5rem;
+}
+
+.mdx-lesson h3 {
+    font-size: 1.25rem;
+}
+
+.mdx-lesson h4 {
+    font-size: 1.0625rem;
+}
+
+.mdx-lesson h5,
+.mdx-lesson h6 {
+    font-size: 1rem;
+}
+
+/* Un titre premier enfant garde la marge zéro ci-dessus. */
+.mdx-lesson > * + h1 {
+    margin-top: 2.75rem;
+}
+
+.mdx-lesson > * + h2 {
+    margin-top: 2.25rem;
+}
+
+.mdx-lesson > * + h3 {
+    margin-top: 1.75rem;
+}
+
+.mdx-lesson > * + h4,
+.mdx-lesson > * + h5,
+.mdx-lesson > * + h6 {
+    margin-top: 1.5rem;
+}
+
+/* ---------- Texte ---------- */
+
+.mdx-lesson strong {
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.mdx-lesson em {
+    font-style: italic;
+}
+
+.mdx-lesson a {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+}
+
+.mdx-lesson a:hover {
+    text-decoration-thickness: 2px;
+}
+
+.mdx-lesson small {
+    font-size: 0.8125rem;
+    color: var(--muted-foreground);
+}
+
+/* ---------- Listes (la préflight les remet à none) ---------- */
+
+.mdx-lesson ul {
+    list-style: disc;
+}
+
+.mdx-lesson ol {
+    list-style: decimal;
+}
+
+.mdx-lesson li + li {
+    margin-top: 0.5rem;
+}
+
+.mdx-lesson li::marker {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.mdx-lesson li > ul {
+    list-style: circle;
+}
+
+.mdx-lesson li > ol {
+    list-style: lower-alpha;
+}
+
+/* ---------- Code ---------- */
+
+.mdx-lesson code {
+    background: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.1rem 0.4rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.875em;
+    overflow-wrap: anywhere;
+}
+
+.mdx-lesson pre {
+    background: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem 1.25rem;
+    overflow-x: auto;
+    font-size: 0.875rem;
+    line-height: 1.6;
+}
+
+.mdx-lesson pre code {
+    background: none;
+    border: 0;
+    padding: 0;
+    font-size: inherit;
+}
+
+/* ---------- Citation / encadré ---------- */
+
+.mdx-lesson blockquote {
+    background: var(--brand-soft);
+    border-left: 3px solid var(--primary);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+    color: var(--brand-soft-foreground);
+    font-style: italic;
+    padding: 0.85rem 1.1rem;
+}
+
+/* ---------- Séparateur ---------- */
+
+.mdx-lesson hr {
+    border-top: 1px solid var(--border);
+    margin-bottom: 2rem;
+    margin-top: 2rem;
+}
+
+/* ---------- Tableaux ---------- */
+
+.mdx-lesson table {
+    border-collapse: collapse;
+    font-size: 0.9375rem;
+    width: 100%;
+}
+
+/* Le scroll horizontal est géré par le conteneur de MdxTable
+   (<div class="overflow-x-auto">), pas par display:block sur la table
+   qui la ferait se dimensionner à son contenu au lieu de 100%. */
+
+.mdx-lesson th,
+.mdx-lesson td {
+    border: 1px solid var(--border);
+    padding: 0.6rem 0.85rem;
+    text-align: left;
+    vertical-align: top;
+}
+
+.mdx-lesson th {
+    background: var(--muted);
+    font-weight: 600;
+}
+
+.mdx-lesson tr:nth-child(even) td {
+    background: color-mix(in srgb, var(--muted) 55%, transparent);
+}
+
+/* ---------- Images ---------- */
+
+.mdx-lesson img {
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    height: auto;
+    max-width: 100%;
+}
+
+.mdx-lesson figure {
+    margin-top: 1.5rem;
+}
+
+.mdx-lesson figcaption {
+    color: var(--muted-foreground);
+    font-size: 0.8125rem;
+    margin-top: 0.5rem;
+    text-align: center;
+}
+
 @keyframes click-ripple {
     0% {
         opacity: 0.85;
