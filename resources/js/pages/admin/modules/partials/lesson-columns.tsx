@@ -1,6 +1,6 @@
 import { Link } from '@inertiajs/react';
 import type { ColumnDef } from '@tanstack/react-table';
-import { MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
+import { ListChecks, MoreHorizontal, Pencil, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { DataTableColumnHeader } from '@/components/ui/data-table-column-header';
@@ -12,6 +12,7 @@ import {
     DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { edit as lessonEdit } from '@/routes/admin/modules/lessons';
+import { edit as quizEdit } from '@/routes/admin/modules/lessons/quiz';
 import type { Lesson } from '@/types/lesson';
 
 export const LESSON_STATUS_OPTIONS = [
@@ -102,6 +103,17 @@ export const createLessonColumns = ({
                             >
                                 <Pencil />
                                 Modifier
+                            </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                            <Link
+                                href={quizEdit({
+                                    module: row.original.module_id,
+                                    lesson: row.original.id,
+                                })}
+                            >
+                                <ListChecks />
+                                Quiz
                             </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem

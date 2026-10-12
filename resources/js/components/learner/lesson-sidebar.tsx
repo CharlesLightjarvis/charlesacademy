@@ -1,19 +1,28 @@
 import { Link } from '@inertiajs/react';
-import { LockKeyhole, PlayCircle } from 'lucide-react';
+import {
+    CheckCircle2,
+    ListChecks,
+    LockKeyhole,
+    PlayCircle,
+} from 'lucide-react';
 import type { LearnModule } from '@/types/learn';
 import { show as lessonShow } from '@/routes/learner/learn/lesson';
+import { show as quizShow } from '@/routes/learner/learn/lesson/quiz';
 import { cn } from '@/lib/utils';
 
 type Props = {
     modules: LearnModule[];
     activeModuleId: string;
     activeLessonId: string;
+    /** Slug de la leçon dont le quiz est affiché (null = page de leçon). */
+    activeQuizId?: string | null;
 };
 
 export function LessonSidebar({
     modules,
     activeModuleId,
     activeLessonId,
+    activeQuizId = null,
 }: Props) {
     const lessonHref = (
         module: LearnModule,
@@ -23,10 +32,18 @@ export function LessonSidebar({
             ? lessonShow.url({ module: module.id, lesson: lesson.id })
             : undefined;
 
+    const quizHref = (
+        module: LearnModule,
+        lesson: { id: string; available: boolean },
+    ) =>
+        lesson.available
+            ? quizShow.url({ module: module.id, lesson: lesson.id })
+            : undefined;
+
     return (
         <nav
             aria-label="Naviguer entre les leçons"
-            className="sticky top-24 hidden max-h-[calc(100dvh-7rem)] overflow-y-auto overscroll-contain rounded-2xl border border-border bg-card/50 p-3 lg:block"
+            className="hidden rounded-2xl border border-border bg-card/50 p-3 lg:block"
         >
             <p className="px-3 pt-1 pb-3 text-[10px] font-semibold tracking-[0.18em] text-primary uppercase">
                 Parcours du niveau
@@ -54,9 +71,20 @@ export function LessonSidebar({
                             {module.lessons.map((lesson) => {
                                 const isLessonActive =
                                     isModuleActive &&
+                                    activeQuizId === null &&
                                     lesson.id === activeLessonId;
+                                const isQuizActive =
+                                    isModuleActive &&
+                                    activeQuizId === lesson.id;
                                 const isReady = lesson.available;
                                 const href = lessonHref(module, lesson);
+                                const quizHrefForLesson = quizHref(
+                                    module,
+                                    lesson,
+                                );
+                                const isQuizDone =
+                                    lesson.bestScore !== null &&
+                                    lesson.bestScore === lesson.quizLength;
 
                                 return (
                                     <li key={lesson.id}>
@@ -127,6 +155,61 @@ export function LessonSidebar({
                                                     {lesson.title}
                                                 </span>
                                             </span>
+                                        )}
+
+                                        {/* Le quiz de la leçon, décalé à droite. */}
+                                        {lesson.quizLength !== null && (
+                                            <ul>
+                                                <li>
+                                                    {quizHrefForLesson ? (
+                                                        <Link
+                                                            href={
+                                                                quizHrefForLesson
+                                                            }
+                                                            className={cn(
+                                                                'ml-7 flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs transition-colors',
+                                                                isQuizActive
+                                                                    ? 'bg-primary/10 font-semibold text-primary'
+                                                                    : isReady
+                                                                      ? 'text-muted-foreground hover:bg-muted hover:text-primary'
+                                                                      : 'text-muted-foreground/60',
+                                                            )}
+                                                            aria-current={
+                                                                isQuizActive
+                                                                    ? 'page'
+                                                                    : undefined
+                                                            }
+                                                        >
+                                                            {isQuizDone ? (
+                                                                <CheckCircle2 className="size-3.5 shrink-0 text-primary" />
+                                                            ) : (
+                                                                <ListChecks className="size-3.5 shrink-0" />
+                                                            )}
+                                                            <span>Quiz</span>
+                                                            {lesson.bestScore !==
+                                                                null && (
+                                                                <span className="ml-auto font-mono text-[10px] text-muted-foreground">
+                                                                    {
+                                                                        lesson.bestScore
+                                                                    }
+                                                                    /
+                                                                    {
+                                                                        lesson.quizLength
+                                                                    }
+                                                                </span>
+                                                            )}
+                                                        </Link>
+                                                    ) : (
+                                                        <span
+                                                            aria-disabled="true"
+                                                            className="ml-7 flex items-center gap-2 rounded-lg px-3 py-1.5 text-xs text-muted-foreground/60 select-none"
+                                                        >
+                                                            <ListChecks className="size-3.5 shrink-0" />
+                                                            <span>Quiz</span>
+                                                        </span>
+                                                    )}
+                                                </li>
+                                            </ul>
                                         )}
                                     </li>
                                 );

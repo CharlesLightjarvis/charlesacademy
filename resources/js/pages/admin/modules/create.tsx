@@ -31,14 +31,14 @@ export default function ModuleCreate({ levels }: Props) {
                 </div>
 
                 <Tabs value="infos">
-                    <TabsList>
+                    <TabsList className="mx-auto w-full max-w-xl">
                         <TabsTrigger value="infos">Informations</TabsTrigger>
                         <TabsTrigger value="lecons" disabled>
                             Leçons
                         </TabsTrigger>
                     </TabsList>
 
-                    <p className="text-xs text-muted-foreground">
+                    <p className="mx-auto w-full max-w-xl text-xs text-muted-foreground">
                         Enregistre d'abord le module : ses leçons s'ajoutent
                         ensuite dans l'onglet Leçons.
                     </p>

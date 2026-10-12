@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Spatie\EloquentSortable\Sortable;
 use Spatie\EloquentSortable\SortableTrait;
 use Spatie\Sluggable\HasSlug;
@@ -45,6 +46,12 @@ class Lesson extends Model implements Sortable
     public function module(): BelongsTo
     {
         return $this->belongsTo(Module::class);
+    }
+
+    /** @return HasOne<Quiz, $this> */
+    public function quiz(): HasOne
+    {
+        return $this->hasOne(Quiz::class);
     }
 
     /**

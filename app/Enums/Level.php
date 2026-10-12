@@ -11,7 +11,6 @@ enum Level: string
     case B1 = 'B1';
     case B2 = 'B2';
 
-
     public function label(): string
     {
         return match ($this) {

@@ -20,11 +20,14 @@ Route::middleware(['auth', 'verified', 'role:'.RoleEnum::Learner->value])
                 Route::get('/', [LearnController::class, 'index'])->name('index');
                 Route::post('level', [LearnController::class, 'updateLevel'])->name('level.update');
 
-                Route::get('lessons/{module:slug}/{lesson:slug}', [LearnController::class, 'show'])
+                // URL explicite : learn/modules/{module}/lessons/{lesson}
+                Route::get('modules/{module:slug}/lessons/{lesson:slug}', [LearnController::class, 'show'])
                     ->name('lesson.show');
-                Route::patch('lessons/{module:slug}/{lesson:slug}/read', [LearnController::class, 'toggleRead'])
+                Route::patch('modules/{module:slug}/lessons/{lesson:slug}/read', [LearnController::class, 'toggleRead'])
                     ->name('lesson.read');
-                Route::post('lessons/{module:slug}/{lesson:slug}/quiz', [LearnController::class, 'submitQuiz'])
-                    ->name('lesson.quiz');
+                Route::get('modules/{module:slug}/lessons/{lesson:slug}/quiz', [LearnController::class, 'showQuiz'])
+                    ->name('lesson.quiz.show');
+                Route::post('modules/{module:slug}/lessons/{lesson:slug}/quiz', [LearnController::class, 'submitQuiz'])
+                    ->name('lesson.quiz.submit');
             });
     });

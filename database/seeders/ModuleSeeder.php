@@ -6,11 +6,15 @@ use App\Enums\Level as LevelEnum;
 use App\Models\Level;
 use App\Models\Module;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class ModuleSeeder extends Seeder
 {
     /**
      * Seed the modules table with the first modules of the catalogue.
+     *
+     * The slug is set by hand: seeding runs without model events
+     * (see DatabaseSeeder), so Spatie's slug hook never fires.
      */
     public function run(): void
     {
@@ -27,6 +31,7 @@ class ModuleSeeder extends Seeder
             Module::query()->firstOrCreate(
                 ['name' => $module['name']],
                 [
+                    'slug' => Str::slug($module['name']),
                     'level_id' => $levels->get($module['level']->value)?->id,
                     'description' => $module['description'],
                 ]

@@ -27,6 +27,7 @@ import {
 import { UserMenuContent } from '@/components/user-menu-content';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
+import { useParentUrl } from '@/hooks/use-parent-url';
 import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import { dashboard as adminDashboard } from '@/routes/admin';
@@ -70,6 +71,15 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
     const { auth } = usePage<{ auth: Auth }>().props;
     const getInitials = useInitials();
     const { isCurrentUrl } = useCurrentUrl();
+    const { isParentUrl } = useParentUrl();
+
+    // Un onglet est actif sur son URL exacte ou sur toutes ses sous-pages :
+    // on reste sur « Modules » pendant la création d'un module, l'édition
+    // d'une leçon ou d'un quiz, et sur « Apprendre » pendant une leçon.
+    function isNavItemActive(item: (typeof navigationItems)[number]): boolean {
+        return isCurrentUrl(item.href) || isParentUrl(item.href);
+    }
+
     const visibleNavItems = navigationItems.filter((item) =>
         auth.permissions.includes(item.permission),
     );
@@ -109,7 +119,11 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                         >
                                             <Link
                                                 href={item.href}
-                                                className="flex items-center gap-3 rounded-md px-3 py-2 font-medium hover:bg-accent"
+                                                className={cn(
+                                                    'flex items-center gap-3 rounded-md px-3 py-2 font-medium hover:bg-accent',
+                                                    isNavItemActive(item) &&
+                                                        'bg-accent',
+                                                )}
                                             >
                                                 {item.icon && (
                                                     <item.icon className="h-5 w-5" />
@@ -142,7 +156,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                         href={item.href}
                                         className={cn(
                                             navigationMenuTriggerStyle(),
-                                            isCurrentUrl(item.href) &&
+                                            isNavItemActive(item) &&
                                                 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100',
                                             'h-9 cursor-pointer px-3',
                                         )}
@@ -152,7 +166,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                         )}
                                         {item.title}
                                     </Link>
-                                    {isCurrentUrl(item.href) && (
+                                    {isNavItemActive(item) && (
                                         <div className="absolute bottom-0 left-0 h-0.5 w-full translate-y-px bg-black dark:bg-white" />
                                     )}
                                 </NavigationMenuItem>

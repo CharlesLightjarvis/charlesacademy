@@ -1,5 +1,4 @@
-import { Form, Head, Link, usePage } from '@inertiajs/react';
-import { useState } from 'react';
+import { Form, Head, Link, router, usePage } from '@inertiajs/react';
 import ModuleController from '@/actions/App/Http/Controllers/Admin/ModuleController';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -23,28 +22,35 @@ type Props = {
 type TabValue = 'infos' | 'lecons';
 
 function readTabFromUrl(url: string): TabValue {
-    const query = new URLSearchParams(url.split('?')[1] ?? '');
-
-    return query.get('tab') === 'lecons' ? 'lecons' : 'infos';
+    return new URLSearchParams(url.split('?')[1] ?? '').get('tab') === 'lecons'
+        ? 'lecons'
+        : 'infos';
 }
 
 export default function ModuleEdit({ module, levels, lessons }: Props) {
+    // L'URL est l'unique source de vérité de l'onglet : elle est écrite par
+    // Inertia dans l'entrée d'historique, donc le retour/avant du navigateur
+    // restaure le bon onglet, sans décalage ni flash.
     const { url } = usePage();
-    const [tab, setTab] = useState<TabValue>(() => readTabFromUrl(url));
+    const tab = readTabFromUrl(url);
 
     function handleTabChange(value: string) {
         const next = value as TabValue;
 
-        setTab(next);
+        if (next === tab) {
+            return;
+        }
 
-        // L'onglet actif vit dans l'URL, sans requête : les données des deux
-        // onglets sont déjà chargées par le contrôleur.
-        window.history.replaceState(
-            window.history.state,
-            '',
+        // Vrai passage par Inertia (et non `history.replaceState`, qu'Inertia
+        // n'enregistre pas dans l'entrée d'historique) : le serveur renvoie
+        // la même page avec la bonne URL, déjà chargée par le contrôleur.
+        // `replace` évite d'empiler une entrée d'historique par onglet.
+        router.get(
             next === 'lecons'
-                ? `${window.location.pathname}?tab=lecons`
-                : window.location.pathname,
+                ? adminModulesEdit.url(module.id, { query: { tab: 'lecons' } })
+                : adminModulesEdit.url(module.id),
+            {},
+            { preserveState: true, preserveScroll: true, replace: true },
         );
     }
 
@@ -64,7 +70,7 @@ export default function ModuleEdit({ module, levels, lessons }: Props) {
                 </div>
 
                 <Tabs value={tab} onValueChange={handleTabChange}>
-                    <TabsList>
+                    <TabsList className="mx-auto w-full max-w-xl">
                         <TabsTrigger value="infos">Informations</TabsTrigger>
                         <TabsTrigger value="lecons">
                             Leçons ({lessons.length})

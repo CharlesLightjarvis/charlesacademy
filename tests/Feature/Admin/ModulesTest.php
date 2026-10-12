@@ -1,13 +1,16 @@
 <?php
 
 use App\Enums\RoleEnum;
+use App\Models\Level;
 use App\Models\Module;
 use App\Models\User;
+use Database\Seeders\LevelSeeder;
 use Database\Seeders\RolesAndPermissionsSeeder;
 use Inertia\Testing\AssertableInertia as Assert;
 
 beforeEach(function () {
     $this->seed(RolesAndPermissionsSeeder::class);
+    $this->seed(LevelSeeder::class);
 });
 
 function admin(): User
@@ -68,6 +71,7 @@ test('an admin creates a module', function () {
     $this->actingAs(admin())
         ->post(route('admin.modules.store'), [
             'name' => 'Alphabet',
+            'level_id' => Level::query()->firstOrFail()->id,
             'description' => 'Lecture et écriture.',
             'is_active' => '1',
         ])
@@ -92,6 +96,7 @@ test('an admin updates a module without changing its slug', function () {
     $this->actingAs(admin())
         ->put(route('admin.modules.update', $module), [
             'name' => 'Grammaire avancée',
+            'level_id' => $module->level_id,
             'description' => 'Nouveau contenu.',
             'is_active' => false,
         ])

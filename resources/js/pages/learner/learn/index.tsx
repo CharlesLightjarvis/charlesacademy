@@ -23,12 +23,18 @@ import type { LearnLevel, LevelCode } from "@/types/learn";
 type Props = {
     levels: LearnLevel[];
     selectedLevel: LevelCode | null;
+    /** Niveau prévisualisé quand l'élève n'en a pas encore choisi (A1). */
+    defaultLevel: LevelCode;
 };
 
-export default function LearnIndex({ levels, selectedLevel }: Props) {
+export default function LearnIndex({
+    levels,
+    selectedLevel,
+    defaultLevel,
+}: Props) {
     const [isSaving, setIsSaving] = useState(false);
     const [chosenModuleId, setChosenModuleId] = useState<string | null>(null);
-    const previewLevel = selectedLevel ?? "A1";
+    const previewLevel = selectedLevel ?? defaultLevel;
     const course = levels.find((item) => item.code === previewLevel);
     const modules = course?.modules ?? [];
     const activeModule =

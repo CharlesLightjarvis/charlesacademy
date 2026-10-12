@@ -8,6 +8,8 @@ use App\Models\Lesson;
 use App\Models\LessonProgress;
 use App\Models\Level;
 use App\Models\Module;
+use App\Models\Quiz;
+use App\Models\QuizQuestion;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,6 +27,9 @@ class LearnController extends Controller
     {
         $user = $request->user();
         $selectedLevel = $this->selectedLevel($user);
+        // Sans niveau choisi, la page prévisualise A1 : il faut lui envoyer
+        // les modules de ce niveau-là, sinon la page s'affiche vide.
+        $previewLevel = $selectedLevel ?? $this->defaultLevel();
 
         return Inertia::render('learner/learn/index', [
             'levels' => Level::query()
@@ -33,12 +38,13 @@ class LearnController extends Controller
                 ->map(fn (Level $level): array => [
                     'code' => $level->code->value,
                     'label' => $level->code->label(),
-                    'modules' => $level->is($selectedLevel)
+                    'modules' => $level->is($previewLevel)
                         ? $this->modulesOfLevel($user, $level)
                         : [],
                 ])
                 ->all(),
             'selectedLevel' => $selectedLevel?->code->value,
+            'defaultLevel' => $previewLevel->code->value,
         ]);
     }
 
@@ -67,15 +73,14 @@ class LearnController extends Controller
         $user = $request->user();
         $level = $module->level ?? Level::query()->where('code', LevelEnum::A1->value)->firstOrFail();
         $modules = $this->modulesOfLevel($user, $level);
-
-        $moduleIndex = array_search($module->slug, array_column($modules, 'id'), true);
-        $lessonData = $modules[$moduleIndex]['lessons'] ?? [];
-        $lessonIndex = array_search($lesson->slug, array_column($lessonData, 'id'), true);
+        [$moduleNumber, $lessonNumber] = $this->positionOf($module, $lesson, $modules);
 
         $progress = LessonProgress::query()
             ->where('user_id', $user->id)
             ->where('lesson_id', $lesson->id)
             ->first();
+
+        $quiz = $this->activeQuizOf($lesson);
 
         return Inertia::render('learner/learn/show', [
             'level' => $level->code->value,
@@ -85,12 +90,54 @@ class LearnController extends Controller
                 'title' => $lesson->title,
                 'introduction' => $lesson->description ?? '',
             ],
-            'moduleNumber' => $moduleIndex === false ? 1 : $moduleIndex + 1,
-            'lessonNumber' => $lessonIndex === false ? 1 : $lessonIndex + 1,
+            'moduleNumber' => $moduleNumber,
+            'lessonNumber' => $lessonNumber,
             'mdx' => $lesson->content,
-            'questions' => $this->publicQuestions($module, $lesson),
+            'quiz' => $quiz === null ? null : [
+                'title' => $quiz->title,
+                'length' => $quiz->questions->count(),
+                'bestScore' => $progress?->best_score,
+            ],
             'modules' => $modules,
             'isRead' => (bool) $progress?->is_read,
+        ]);
+    }
+
+    /**
+     * La page du quiz d'une leçon : une question à la fois, corrigée à la fin.
+     */
+    public function showQuiz(Request $request, Module $module, Lesson $lesson): Response
+    {
+        abort_unless($module->is_active && $lesson->is_active, 404);
+
+        $quiz = $this->activeQuizOf($lesson);
+        abort_if($quiz === null || $quiz->questions->isEmpty(), 404);
+
+        $user = $request->user();
+        $level = $module->level ?? Level::query()->where('code', LevelEnum::A1->value)->firstOrFail();
+        $modules = $this->modulesOfLevel($user, $level);
+        [$moduleNumber, $lessonNumber] = $this->positionOf($module, $lesson, $modules);
+
+        $progress = LessonProgress::query()
+            ->where('user_id', $user->id)
+            ->where('lesson_id', $lesson->id)
+            ->first();
+
+        return Inertia::render('learner/learn/quiz', [
+            'level' => $level->code->value,
+            'module' => ['id' => $module->slug, 'title' => $module->name],
+            'lesson' => ['id' => $lesson->slug, 'title' => $lesson->title],
+            'moduleNumber' => $moduleNumber,
+            'lessonNumber' => $lessonNumber,
+            'quiz' => ['title' => $quiz->title ?? 'Quiz de la leçon'],
+            // Les réponses et explications ne partent jamais vers le front.
+            'questions' => $quiz->questions->map(fn (QuizQuestion $question): array => [
+                'id' => (string) $question->id,
+                'prompt' => $question->prompt,
+                'options' => $question->options,
+            ])->values()->all(),
+            'bestScore' => $progress?->best_score,
+            'modules' => $modules,
         ]);
     }
 
@@ -120,30 +167,32 @@ class LearnController extends Controller
     {
         abort_unless($module->is_active && $lesson->is_active, 404);
 
-        $questions = $this->quizOf($module, $lesson);
-        abort_if($questions === [], 404);
+        $quiz = $this->activeQuizOf($lesson);
+        abort_if($quiz === null || $quiz->questions->isEmpty(), 404);
+
+        $questions = $quiz->questions;
 
         $rules = [];
-        foreach ($questions as $key => $question) {
-            $rules["answers.{$key}"] = ['required', Rule::in(array_keys($question['options']))];
+        foreach ($questions as $question) {
+            $rules["answers.{$question->id}"] = ['required', Rule::in(array_keys($question->options))];
         }
         $answers = $request->validate($rules)['answers'];
 
         $corrections = [];
         $score = 0;
 
-        foreach ($questions as $key => $question) {
-            $selected = $answers[$key];
-            $isCorrect = $selected === $question['correct'];
+        foreach ($questions as $question) {
+            $selected = $answers[$question->id];
+            $isCorrect = $selected === $question->correct_option;
 
             if ($isCorrect) {
                 $score++;
             }
 
-            $corrections[$key] = [
+            $corrections[$question->id] = [
                 'selected' => $selected,
-                'correct' => $question['correct'],
-                'explanation' => $question['explanation'],
+                'correct' => $question->correct_option,
+                'explanation' => $question->explanation,
                 'is_correct' => $isCorrect,
             ];
         }
@@ -159,9 +208,10 @@ class LearnController extends Controller
         $progress->save();
 
         return redirect()
-            ->route('learner.learn.lesson.show', [$module->slug, $lesson->slug])
+            ->route('learner.learn.lesson.quiz.show', [$module->slug, $lesson->slug])
             ->with('quizResult', [
                 'score' => $score,
+                'total' => $questions->count(),
                 'bestScore' => $progress->best_score,
                 'corrections' => $corrections,
             ]);
@@ -180,10 +230,20 @@ class LearnController extends Controller
     }
 
     /**
+     * Niveau prévisualisé quand l'apprenant n'en a pas encore choisi : A1,
+     * ou le premier niveau de la base s'il n'existe pas.
+     */
+    private function defaultLevel(): Level
+    {
+        return Level::query()->where('code', LevelEnum::A1->value)->first()
+            ?? Level::query()->ordered()->firstOrFail();
+    }
+
+    /**
      * Les modules actifs d'un niveau, avec leurs leçons et la progression
      * de l'apprenant : c'est la forme de données des pages étudiantes.
      *
-     * @return array<int, array{id: string, title: string, lessons: array<int, array{id: string, title: string, category: string, available: boolean, read: boolean, bestScore: int|null, quizLength: int|null}>}>
+     * @return array<int, array{id: string, title: string, lessons: array<int, array{id: string, title: string, category: string, available: bool, read: bool, bestScore: int|null, quizLength: int|null}>}>
      */
     private function modulesOfLevel(?User $user, Level $level): array
     {
@@ -191,7 +251,7 @@ class LearnController extends Controller
             ->where('is_active', true)
             ->where('level_id', $level->id)
             ->ordered()
-            ->with(['lessons' => fn ($query) => $query->ordered()])
+            ->with(['lessons' => fn ($query) => $query->ordered()->with('quiz.questions')])
             ->get();
 
         $progressions = $user === null
@@ -208,7 +268,7 @@ class LearnController extends Controller
                 'title' => $module->name,
                 'lessons' => $module->lessons->map(function (Lesson $lesson) use ($module, $progressions) {
                     $progress = $progressions->get($lesson->id);
-                    $quiz = $this->quizOf($module, $lesson);
+                    $quiz = $lesson->quiz;
 
                     return [
                         'id' => $lesson->slug,
@@ -217,7 +277,7 @@ class LearnController extends Controller
                         'available' => $lesson->is_active,
                         'read' => (bool) $progress?->is_read,
                         'bestScore' => $progress?->best_score,
-                        'quizLength' => $quiz === [] ? null : count($quiz),
+                        'quizLength' => $quiz !== null && $quiz->is_active ? $quiz->questions->count() : null,
                     ];
                 })->all(),
             ];
@@ -225,73 +285,32 @@ class LearnController extends Controller
     }
 
     /**
-     * Questions du quiz de la leçon (aucun = pas d'onglet Quiz côté étudiant).
-     * Les réponses et explications ne partent jamais vers le front.
-     *
-     * @return array<string, array{prompt: string, options: array<string, string>, correct: string, explanation: string}>
+     * Le quiz actif d'une leçon, avec ses questions dans l'ordre (null si
+     * la leçon n'en a pas ou s'il est désactivé).
      */
-    private function quizOf(Module $module, Lesson $lesson): array
+    private function activeQuizOf(Lesson $lesson): ?Quiz
     {
-        if ($lesson->slug !== 'alphabet') {
-            return [];
-        }
-
-        return [
-            'vowels' => [
-                'prompt' => 'Quelles sont les cinq voyelles de l’alphabet allemand ?',
-                'options' => [
-                    'a' => 'A, E, I, O, U',
-                    'b' => 'A, E, Y, O, Ü',
-                    'c' => 'A, Ä, I, O, Ü',
-                ],
-                'correct' => 'a',
-                'explanation' => 'L’allemand compte cinq voyelles : A, E, I, O, U (auxquelles s’ajoutent Ä, Ö, Ü).',
-            ],
-            'pronunciation-c' => [
-                'prompt' => 'Comment se prononce la lettre C en allemand ?',
-                'options' => [
-                    'a' => 'tsé',
-                    'b' => 'tsets',
-                    'c' => 'sé',
-                ],
-                'correct' => 'b',
-                'explanation' => 'C se prononce « tsets » (comme dans Celle).',
-            ],
-            'name-w' => [
-                'prompt' => 'Comment s’appelle la lettre W ?',
-                'options' => [
-                    'a' => 'vé',
-                    'b' => 'double-vé',
-                    'c' => 'doux-vé',
-                ],
-                'correct' => 'b',
-                'explanation' => 'W se dit « double-vé » (W au début d’un mot, V au milieu : Wein, Frau).',
-            ],
-            'order' => [
-                'prompt' => 'Quelle lettre suit le B dans l’alphabet ?',
-                'options' => [
-                    'a' => 'D',
-                    'b' => 'E',
-                    'c' => 'C',
-                ],
-                'correct' => 'c',
-                'explanation' => 'L’alphabet suit l’ordre classique : A, B, C, D…',
-            ],
-        ];
+        return $lesson->quiz()
+            ->where('is_active', true)
+            ->with(['questions' => fn ($query) => $query->ordered()])
+            ->first();
     }
 
     /**
-     * Version publique des questions (sans correct/explanation).
+     * Numéro du module et numéro de la leçon dans le parcours affiché.
      *
-     * @return array<string, array{prompt: string, options: array<string, string>}>
+     * @param  array<int, array{id: string, title: string, lessons: array<int, array{id: string, title: string, category: string, available: bool, read: bool, bestScore: int|null, quizLength: int|null}>}>  $modules
+     * @return array{0: int, 1: int}
      */
-    private function publicQuestions(Module $module, Lesson $lesson): array
+    private function positionOf(Module $module, Lesson $lesson, array $modules): array
     {
-        return collect($this->quizOf($module, $lesson))
-            ->map(fn (array $question): array => [
-                'prompt' => $question['prompt'],
-                'options' => $question['options'],
-            ])
-            ->all();
+        $moduleIndex = array_search($module->slug, array_column($modules, 'id'), true);
+        $lessonData = $moduleIndex === false ? [] : $modules[$moduleIndex]['lessons'] ?? [];
+        $lessonIndex = array_search($lesson->slug, array_column($lessonData, 'id'), true);
+
+        return [
+            $moduleIndex === false ? 1 : $moduleIndex + 1,
+            $lessonIndex === false ? 1 : $lessonIndex + 1,
+        ];
     }
 }
