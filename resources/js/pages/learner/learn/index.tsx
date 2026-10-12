@@ -13,7 +13,6 @@ import {
     SelectContent,
     SelectItem,
     SelectTrigger,
-    SelectValue,
 } from "@/components/ui/select";
 import { show as lessonShow } from "@/routes/learner/learn/lesson";
 import { update as updateLevel } from "@/routes/learner/learn/level";
@@ -158,7 +157,10 @@ export default function LearnIndex({
                                             </p>
 
                                             <div className="mt-1 truncate font-display text-base font-semibold text-foreground sm:text-xl">
-                                                <SelectValue placeholder="Choisir un module" />
+                                                {/* Titre en clair : `SelectValue`
+                                                    recopierait le contenu de
+                                                    l'item (numéro + leçons). */}
+                                                {activeModule?.title ?? ''}
                                             </div>
 
                                             <p className="mt-1 text-xs text-muted-foreground">

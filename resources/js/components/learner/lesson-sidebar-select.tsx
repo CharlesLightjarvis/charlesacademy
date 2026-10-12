@@ -7,7 +7,6 @@ import {
     SelectItem,
     SelectLabel,
     SelectTrigger,
-    SelectValue,
 } from '@/components/ui/select';
 import type { LearnModule } from '@/types/learn';
 import { show as lessonShow } from '@/routes/learner/learn/lesson';
@@ -75,8 +74,10 @@ export function LessonSidebarSelect({
                             <p className="text-[10px] font-semibold tracking-[0.18em] text-primary uppercase">
                                 {activeQuiz ? 'Quiz' : 'Leçon'}
                             </p>
+                            {/* Le titre en clair : `SelectValue` recopierait le
+                                contenu de l'item, avec sa propre icône. */}
                             <p className="mt-0.5 truncate font-display text-sm font-semibold">
-                                <SelectValue placeholder="Choisir une leçon" />
+                                {activeLesson?.title ?? ''}
                             </p>
                         </div>
                     </div>

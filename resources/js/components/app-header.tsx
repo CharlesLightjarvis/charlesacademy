@@ -28,6 +28,7 @@ import { UserMenuContent } from '@/components/user-menu-content';
 import { useCurrentUrl } from '@/hooks/use-current-url';
 import { useInitials } from '@/hooks/use-initials';
 import { useParentUrl } from '@/hooks/use-parent-url';
+import { useScroll } from '@/layouts/home/partials/use-scroll';
 import { cn } from '@/lib/utils';
 import { dashboard } from '@/routes';
 import { dashboard as adminDashboard } from '@/routes/admin';
@@ -72,6 +73,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
     const getInitials = useInitials();
     const { isCurrentUrl } = useCurrentUrl();
     const { isParentUrl } = useParentUrl();
+    const scrolled = useScroll(10);
 
     // Un onglet est actif sur son URL exacte ou sur toutes ses sous-pages :
     // on reste sur « Modules » pendant la création d'un module, l'édition
@@ -87,7 +89,14 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
 
     return (
         <>
-            <div className="border-b border-sidebar-border/80">
+            <header
+                className={cn(
+                    'sticky top-0 z-50 w-full border-b transition-colors duration-300',
+                    scrolled
+                        ? 'border-border/60 bg-background/85 shadow-sm backdrop-blur-xl supports-[backdrop-filter]:bg-background/60'
+                        : 'border-transparent bg-transparent',
+                )}
+            >
                 <div className="mx-auto flex h-16 items-center px-4 md:max-w-7xl">
                     <div className="lg:hidden">
                         <Sheet>
@@ -120,7 +129,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                             <Link
                                                 href={item.href}
                                                 className={cn(
-                                                    'flex items-center gap-3 rounded-md px-3 py-2 font-medium hover:bg-accent',
+                                                    'flex items-center gap-3 rounded-md px-3 py-2 font-display font-normal hover:bg-accent',
                                                     isNavItemActive(item) &&
                                                         'bg-accent',
                                                 )}
@@ -158,7 +167,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                                             navigationMenuTriggerStyle(),
                                             isNavItemActive(item) &&
                                                 'text-neutral-900 dark:bg-neutral-800 dark:text-neutral-100',
-                                            'h-9 cursor-pointer px-3',
+                                            'h-9 cursor-pointer bg-transparent px-3 font-display font-normal',
                                         )}
                                     >
                                         {item.icon && (
@@ -175,7 +184,10 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                     </NavigationMenu>
 
                     <div className="ml-auto">
-                        <DropdownMenu>
+                        {/* modal={false} : pas de verrouillage du scroll du
+                            body à l'ouverture (sinon la barre de défilement
+                            est compensée en padding et tout se décale). */}
+                        <DropdownMenu modal={false}>
                             <DropdownMenuTrigger asChild>
                                 <Button
                                     variant="ghost"
@@ -200,7 +212,7 @@ export function AppHeader({ breadcrumbs = [] }: Props) {
                         </DropdownMenu>
                     </div>
                 </div>
-            </div>
+            </header>
             {breadcrumbs.length > 1 && (
                 <div className="border-b border-sidebar-border/70">
                     <div className="mx-auto flex h-12 items-center px-4 text-neutral-500 md:max-w-7xl">
