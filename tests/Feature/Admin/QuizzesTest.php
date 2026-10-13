@@ -199,6 +199,53 @@ test('questions are validated', function () {
         ->assertSessionHasErrors('correct_option');
 });
 
+test('an admin can add a fourth option to a question', function () {
+    [$module, $lesson] = quizModuleWithLesson();
+    $quiz = $lesson->quiz()->create(['title' => 'Quiz']);
+
+    $this->actingAs(quizAdmin())
+        ->post(route('admin.modules.lessons.quiz.questions.store', [$module, $lesson]), [
+            'prompt' => 'Combien de lettres dans l’alphabet ?',
+            'options' => ['a' => '26', 'b' => '24', 'c' => '28', 'd' => '30'],
+            'correct_option' => 'd',
+            'explanation' => 'L’alphabet français compte 26 lettres.',
+        ])
+        ->assertRedirect(route('admin.modules.lessons.quiz.edit', [$module, $lesson]));
+
+    $question = $quiz->questions()->orderByDesc('id')->first();
+
+    expect($question->options)->toHaveKeys(['a', 'b', 'c', 'd']);
+    expect($question->options['d'])->toBe('30');
+    expect($question->correct_option)->toBe('d');
+});
+
+test('the fourth option is optional and must exist when it is the correct answer', function () {
+    [$module, $lesson] = quizModuleWithLesson();
+    $quiz = $lesson->quiz()->create(['title' => 'Quiz']);
+
+    // Sans quatrième proposition, tout fonctionne comme avant.
+    $this->actingAs(quizAdmin())
+        ->post(route('admin.modules.lessons.quiz.questions.store', [$module, $lesson]), [
+            'prompt' => 'Une question ?',
+            'options' => ['a' => 'Une', 'b' => 'Deux', 'c' => 'Trois'],
+            'correct_option' => 'c',
+        ])
+        ->assertRedirect(route('admin.modules.lessons.quiz.edit', [$module, $lesson]));
+
+    expect($quiz->questions()->orderByDesc('id')->first()->options)->toHaveKeys(['a', 'b', 'c']);
+
+    // Une proposition D vide est ignorée : D ne peut pas être la bonne réponse.
+    $this->actingAs(quizAdmin())
+        ->post(route('admin.modules.lessons.quiz.questions.store', [$module, $lesson]), [
+            'prompt' => 'Une autre question ?',
+            'options' => ['a' => 'Une', 'b' => 'Deux', 'c' => 'Trois', 'd' => ' '],
+            'correct_option' => 'd',
+        ])
+        ->assertSessionHasErrors('correct_option');
+
+    expect($quiz->questions()->count())->toBe(1);
+});
+
 test('a question of another quiz cannot be reached through this one', function () {
     [$module, $lesson] = quizModuleWithLesson();
     $lesson->quiz()->create(['title' => 'Quiz']);

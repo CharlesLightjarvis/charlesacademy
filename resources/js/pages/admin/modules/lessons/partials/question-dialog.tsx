@@ -1,4 +1,6 @@
 import { Form } from '@inertiajs/react';
+import { Plus, X } from 'lucide-react';
+import { useEffect, useState, type MouseEvent } from 'react';
 import QuizController from '@/actions/App/Http/Controllers/Admin/QuizController';
 import { Button } from '@/components/ui/button';
 import {
@@ -18,6 +20,7 @@ import type { Module } from '@/types/module';
 import type { QuizQuestion } from '../quiz';
 
 const OPTION_KEYS = ['a', 'b', 'c'] as const;
+type OptionKey = (typeof OPTION_KEYS)[number] | 'd';
 
 type Props = {
     module: Module;
@@ -36,6 +39,42 @@ export default function QuestionDialog({
     const isCreate = question === 'create';
     const values = isCreate || question === null ? null : question;
     const args = { module: module.id, lesson: lesson.id };
+
+    // La quatrième proposition (D) est facultative : elle n'apparaît que si
+    // l'admin l'ajoute, ou si la question en a déjà une.
+    const [hasFourth, setHasFourth] = useState(
+        () => values?.options.d !== undefined,
+    );
+    const optionKeys: OptionKey[] = hasFourth
+        ? [...OPTION_KEYS, 'd']
+        : [...OPTION_KEYS];
+
+    useEffect(() => {
+        setHasFourth(question !== null && values?.options.d !== undefined);
+    }, [question, values]);
+
+    /**
+     * Retire la proposition D : si elle était la bonne réponse, on repasse
+     * sur A pour que le formulaire reste cohérent.
+     */
+    function removeFourthOption(event: MouseEvent<HTMLButtonElement>) {
+        const form = event.currentTarget.form;
+        const checked = form?.querySelector<HTMLInputElement>(
+            'input[name="correct_option"]:checked',
+        );
+
+        if (checked?.value === 'd') {
+            const optionA = form?.querySelector<HTMLInputElement>(
+                'input[name="correct_option"][value="a"]',
+            );
+
+            if (optionA) {
+                optionA.checked = true;
+            }
+        }
+
+        setHasFourth(false);
+    }
 
     return (
         <Dialog
@@ -65,8 +104,9 @@ export default function QuestionDialog({
                                         : 'Modifier la question'}
                                 </DialogTitle>
                                 <DialogDescription>
-                                    Trois propositions (A, B, C) et la bonne
-                                    réponse à cocher.
+                                    Trois propositions (A, B, C) — une quatrième
+                                    (D) facultative — et la bonne réponse à
+                                    cocher.
                                 </DialogDescription>
                             </DialogHeader>
 
@@ -92,7 +132,7 @@ export default function QuestionDialog({
                                         Propositions
                                     </legend>
 
-                                    {OPTION_KEYS.map((key, index) => (
+                                    {optionKeys.map((key, index) => (
                                         <div
                                             key={key}
                                             className="flex items-center gap-2"
@@ -102,7 +142,8 @@ export default function QuestionDialog({
                                             </span>
                                             <Input
                                                 name={`options.${key}`}
-                                                required
+                                                // La proposition D est facultative.
+                                                required={key !== 'd'}
                                                 autoComplete="off"
                                                 placeholder={
                                                     index === 0
@@ -130,6 +171,16 @@ export default function QuestionDialog({
                                                 />
                                                 Bonne
                                             </label>
+                                            {key === 'd' && (
+                                                <button
+                                                    type="button"
+                                                    aria-label="Retirer la quatrième proposition"
+                                                    className="flex size-7 shrink-0 items-center justify-center rounded-full text-muted-foreground hover:bg-muted hover:text-foreground"
+                                                    onClick={removeFourthOption}
+                                                >
+                                                    <X className="size-4" />
+                                                </button>
+                                            )}
                                             <InputError
                                                 message={
                                                     errors[`options.${key}`]
@@ -137,6 +188,17 @@ export default function QuestionDialog({
                                             />
                                         </div>
                                     ))}
+
+                                    {!hasFourth && (
+                                        <button
+                                            type="button"
+                                            className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                                            onClick={() => setHasFourth(true)}
+                                        >
+                                            <Plus className="size-4" />
+                                            Ajouter une quatrième réponse
+                                        </button>
+                                    )}
 
                                     <InputError
                                         className="mt-2"

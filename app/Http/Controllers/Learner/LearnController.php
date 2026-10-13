@@ -11,9 +11,11 @@ use App\Models\Module;
 use App\Models\Quiz;
 use App\Models\QuizQuestion;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -157,6 +159,45 @@ class LearnController extends Controller
         $progress->save();
 
         return back();
+    }
+
+    /**
+     * Corrige une seule réponse dès qu'elle est validée (JSON) : la page
+     * étudiante l'affiche tout de suite en vert / rouge. Le score n'est
+     * calculé qu'à la soumission finale, où toutes les réponses repassent
+     * par le serveur.
+     */
+    public function validateAnswer(Request $request, Module $module, Lesson $lesson): JsonResponse
+    {
+        abort_unless($module->is_active && $lesson->is_active, 404);
+
+        $quiz = $this->activeQuizOf($lesson);
+        abort_if($quiz === null || $quiz->questions->isEmpty(), 404);
+
+        $validated = $request->validate([
+            'question_id' => [
+                'required',
+                'integer',
+                Rule::exists('quiz_questions', 'id')->where('quiz_id', $quiz->id),
+            ],
+            'answer' => ['required', 'string', 'max:255'],
+        ]);
+
+        $question = $quiz->questions->firstWhere('id', (int) $validated['question_id']);
+        abort_if($question === null, 404);
+
+        if (! array_key_exists($validated['answer'], $question->options)) {
+            throw ValidationException::withMessages([
+                'answer' => "Cette réponse n'existe pas pour cette question.",
+            ]);
+        }
+
+        return response()->json([
+            'selected' => $validated['answer'],
+            'correct' => $question->correct_option,
+            'explanation' => $question->explanation,
+            'is_correct' => $validated['answer'] === $question->correct_option,
+        ]);
     }
 
     /**

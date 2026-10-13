@@ -27,6 +27,10 @@ Route::middleware(['auth', 'verified', 'role:'.RoleEnum::Learner->value])
                     ->name('lesson.read');
                 Route::get('modules/{module:slug}/lessons/{lesson:slug}/quiz', [LearnController::class, 'showQuiz'])
                     ->name('lesson.quiz.show');
+                // Correction immédiate d'une réponse (JSON) : la page étudiante
+                // demande la correction question par question.
+                Route::post('modules/{module:slug}/lessons/{lesson:slug}/quiz/validate', [LearnController::class, 'validateAnswer'])
+                    ->name('lesson.quiz.validate');
                 Route::post('modules/{module:slug}/lessons/{lesson:slug}/quiz', [LearnController::class, 'submitQuiz'])
                     ->name('lesson.quiz.submit');
             });

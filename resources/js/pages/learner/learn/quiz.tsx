@@ -1,9 +1,9 @@
 import { Head, Link, useForm } from '@inertiajs/react';
 import {
     ArrowLeft,
+    ArrowRight,
     CheckCircle2,
     Circle,
-    CircleDashed,
     ListChecks,
     RotateCcw,
     XCircle,
@@ -15,7 +15,10 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { index as learnIndex } from '@/routes/learner/learn';
 import { show as lessonShow } from '@/routes/learner/learn/lesson';
-import { submit as quizSubmit } from '@/routes/learner/learn/lesson/quiz';
+import {
+    submit as quizSubmit,
+    validate as quizValidate,
+} from '@/routes/learner/learn/lesson/quiz';
 import type { LearnModule } from '@/types/learn';
 
 type Question = { id: string; prompt: string; options: Record<string, string> };
@@ -59,10 +62,15 @@ export default function LessonQuiz({
 }: Props) {
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState<Record<string, string>>({});
+    const [corrections, setCorrections] = useState<Record<string, Correction>>(
+        {},
+    );
+    const [validating, setValidating] = useState(false);
+    const [validationError, setValidationError] = useState<string | null>(null);
     const [result, setResult] = useState<QuizResult | null>(null);
     const { post, processing, errors, transform } = useForm();
 
-    // La correction revient par le flash après la soumission.
+    // La correction finale revient par le flash après la soumission.
     useEffect(() => {
         if (flash?.quizResult) {
             setResult(flash.quizResult);
@@ -70,16 +78,74 @@ export default function LessonQuiz({
     }, [flash?.quizResult]);
 
     const current = questions[step];
-    const correction = result?.corrections[current.id];
-    const isCorrecting = result !== null;
-    const answered = questions.filter(
-        (question) => answers[question.id],
-    ).length;
+    // Chaque réponse est corrigée au fil du eau ; après la soumission, le
+    // flash complète les corrections (la page vient d'être rechargée).
+    const correction =
+        corrections[current.id] ?? result?.corrections[current.id];
+    const isReviewing = result !== null;
     const bestScore = result?.bestScore ?? initialBestScore;
+    const isLastQuestion = step === questions.length - 1;
     const questionError = (errors as Record<string, string | undefined>)[
         `answers.${current.id}`
     ];
 
+    /**
+     * Envoie la réponse choisie au serveur, qui la corrige tout de suite :
+     * vert si elle est bonne, sinon notre choix passe en rouge et la bonne
+     * proposition en vert. La question est ensuite verrouillée.
+     */
+    async function validateCurrentAnswer() {
+        const selected = answers[current.id];
+
+        if (!selected || validating) {
+            return;
+        }
+
+        setValidating(true);
+        setValidationError(null);
+
+        try {
+            const response = await fetch(
+                quizValidate.url({ module: module.id, lesson: lesson.id }),
+                {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest',
+                        'X-CSRF-TOKEN':
+                            document
+                                .querySelector('meta[name="csrf-token"]')
+                                ?.getAttribute('content') ?? '',
+                    },
+                    body: JSON.stringify({
+                        question_id: current.id,
+                        answer: selected,
+                    }),
+                },
+            );
+
+            if (!response.ok) {
+                throw new Error('La validation a échoué.');
+            }
+
+            const validated: Correction = await response.json();
+
+            setCorrections((previous) => ({
+                ...previous,
+                [current.id]: validated,
+            }));
+        } catch {
+            setValidationError('La vérification a échoué, réessaie.');
+        } finally {
+            setValidating(false);
+        }
+    }
+
+    /**
+     * Toutes les réponses sont verrouillées : on les renvoie au serveur qui
+     * calcule et enregistre le score.
+     */
     function submitAnswers() {
         transform(() => ({ answers }));
 
@@ -105,6 +171,7 @@ export default function LessonQuiz({
     function restart() {
         setResult(null);
         setAnswers({});
+        setCorrections({});
         setStep(0);
     }
 
@@ -179,35 +246,39 @@ export default function LessonQuiz({
                             {/* Barre de progression : cliquable pour se déplacer. */}
                             <div className="flex items-center gap-3">
                                 <p className="shrink-0 text-xs font-semibold tracking-wider text-muted-foreground uppercase">
-                                    {isCorrecting
-                                        ? `Question ${step + 1} / ${questions.length}`
-                                        : answered === questions.length
-                                          ? 'Dernière question'
-                                          : `Question ${step + 1} / ${questions.length}`}
+                                    Question {step + 1} / {questions.length}
                                 </p>
                                 <div className="flex flex-1 gap-1.5">
-                                    {questions.map((question, index) => (
-                                        <button
-                                            key={question.id}
-                                            type="button"
-                                            aria-label={`Aller à la question ${index + 1}`}
-                                            disabled={
-                                                !isCorrecting && index > step
-                                            }
-                                            onClick={() => setStep(index)}
-                                            className={cn(
-                                                'h-1.5 flex-1 rounded-full transition-colors',
-                                                isCorrecting
-                                                    ? 'cursor-pointer bg-primary/80 hover:bg-primary'
-                                                    : index < step ||
-                                                        answers[question.id]
-                                                      ? 'cursor-pointer bg-primary'
-                                                      : index === step
-                                                        ? 'bg-primary/40'
-                                                        : 'bg-muted',
-                                            )}
-                                        />
-                                    ))}
+                                    {questions.map((question, index) => {
+                                        const questionCorrection =
+                                            corrections[question.id] ??
+                                            result?.corrections[question.id];
+
+                                        return (
+                                            <button
+                                                key={question.id}
+                                                type="button"
+                                                aria-label={`Aller à la question ${index + 1}`}
+                                                disabled={
+                                                    !isReviewing && index > step
+                                                }
+                                                onClick={() => setStep(index)}
+                                                className={cn(
+                                                    'h-1.5 flex-1 rounded-full transition-colors',
+                                                    questionCorrection
+                                                        ? questionCorrection.is_correct
+                                                            ? 'cursor-pointer bg-success hover:opacity-80'
+                                                            : 'cursor-pointer bg-destructive hover:opacity-80'
+                                                        : index < step ||
+                                                            answers[question.id]
+                                                          ? 'cursor-pointer bg-primary hover:bg-primary/80'
+                                                          : index === step
+                                                            ? 'bg-primary/40'
+                                                            : 'bg-muted',
+                                                )}
+                                            />
+                                        );
+                                    })}
                                 </div>
                             </div>
 
@@ -236,15 +307,17 @@ export default function LessonQuiz({
                                 </div>
                             )}
 
-                            <fieldset
-                                key={current.id}
-                                className="mt-6 rounded-2xl border border-border p-5 sm:p-6"
-                            >
-                                <legend className="px-2 font-display text-lg font-semibold">
-                                    {step + 1}. {current.prompt}
-                                </legend>
+                            {/* Question centrée, sans carte : les propositions
+                                occupent toute la largeur, deux par ligne. */}
+                            <div key={current.id} className="mt-8">
+                                <p className="text-center font-display text-lg font-semibold sm:text-xl">
+                                    <span className="text-primary">
+                                        {step + 1}.
+                                    </span>{' '}
+                                    {current.prompt}
+                                </p>
 
-                                <div className="mt-4 grid gap-2 sm:grid-cols-3">
+                                <div className="mt-5 grid grid-cols-2 gap-2 sm:gap-3">
                                     {Object.entries(current.options).map(
                                         ([optionKey, label]) => {
                                             if (correction) {
@@ -259,46 +332,33 @@ export default function LessonQuiz({
                                                     <div
                                                         key={optionKey}
                                                         className={cn(
-                                                            'flex items-center gap-3 rounded-xl border p-4',
+                                                            'flex items-center gap-2.5 rounded-xl border p-3 sm:p-4',
                                                             isRightOption
-                                                                ? 'border-primary bg-primary/5'
+                                                                ? 'border-success bg-success/10'
                                                                 : isChosen
-                                                                  ? 'border-destructive bg-destructive/5'
+                                                                  ? 'border-destructive bg-destructive/10'
                                                                   : 'border-border',
                                                         )}
                                                     >
                                                         {isRightOption ? (
-                                                            <CheckCircle2 className="size-4 shrink-0 text-primary" />
+                                                            <CheckCircle2 className="size-4 shrink-0 text-success" />
                                                         ) : isChosen ? (
                                                             <XCircle className="size-4 shrink-0 text-destructive" />
                                                         ) : (
                                                             <Circle className="size-4 shrink-0 text-muted-foreground/40" />
                                                         )}
                                                         <span
-                                                            className={
-                                                                isRightOption ||
-                                                                isChosen
-                                                                    ? 'font-medium'
-                                                                    : 'text-muted-foreground'
-                                                            }
+                                                            className={cn(
+                                                                'min-w-0 text-sm leading-snug',
+                                                                isRightOption
+                                                                    ? 'font-medium text-success'
+                                                                    : isChosen
+                                                                      ? 'font-medium text-destructive'
+                                                                      : 'text-muted-foreground',
+                                                            )}
                                                         >
                                                             {label}
                                                         </span>
-                                                        {(isRightOption ||
-                                                            isChosen) && (
-                                                            <span
-                                                                className={cn(
-                                                                    'ml-auto shrink-0 text-[10px] font-bold tracking-wider uppercase',
-                                                                    isRightOption
-                                                                        ? 'text-primary'
-                                                                        : 'text-destructive',
-                                                                )}
-                                                            >
-                                                                {isRightOption
-                                                                    ? 'Bonne réponse'
-                                                                    : 'Ta réponse'}
-                                                            </span>
-                                                        )}
                                                     </div>
                                                 );
                                             }
@@ -306,7 +366,7 @@ export default function LessonQuiz({
                                             return (
                                                 <label
                                                     key={optionKey}
-                                                    className="flex cursor-pointer items-center gap-3 rounded-xl border border-border p-4 has-checked:border-primary has-checked:bg-primary/5"
+                                                    className="flex cursor-pointer items-center gap-2.5 rounded-xl border border-border p-3 transition-colors has-checked:border-primary has-checked:bg-primary/5 sm:p-4"
                                                 >
                                                     <input
                                                         type="radio"
@@ -328,7 +388,9 @@ export default function LessonQuiz({
                                                         }
                                                         className="accent-primary"
                                                     />
-                                                    <span>{label}</span>
+                                                    <span className="min-w-0 text-sm leading-snug">
+                                                        {label}
+                                                    </span>
                                                 </label>
                                             );
                                         },
@@ -336,38 +398,77 @@ export default function LessonQuiz({
                                 </div>
 
                                 {correction?.explanation && (
-                                    <p className="mt-4 text-sm text-muted-foreground">
+                                    <p className="mx-auto mt-4 max-w-2xl text-center text-sm text-muted-foreground">
                                         {correction.explanation}
                                     </p>
                                 )}
 
                                 {questionError && (
-                                    <p className="mt-3 text-sm text-destructive">
+                                    <p className="mt-3 text-center text-sm text-destructive">
                                         {questionError}
                                     </p>
                                 )}
-                            </fieldset>
 
-                            <div className="mt-6 flex flex-wrap items-center gap-3">
-                                <Button
-                                    variant="outline"
-                                    size="lg"
-                                    disabled={step === 0 || processing}
-                                    onClick={() =>
-                                        setStep((currentStep) =>
-                                            Math.max(0, currentStep - 1),
-                                        )
-                                    }
-                                >
-                                    <ArrowLeft className="size-4" />
-                                    Précédent
-                                </Button>
+                                {validationError && (
+                                    <p className="mt-3 text-center text-sm text-destructive">
+                                        {validationError}
+                                    </p>
+                                )}
+                            </div>
 
-                                {isCorrecting ? (
-                                    step < questions.length - 1 ? (
+                            {/* Un seul bouton centré : il valide la réponse,
+                                puis guide jusqu'au résultat. */}
+                            <div className="mt-7 flex flex-col items-center gap-3">
+                                {/* Verdict au-dessus du bouton, dès la
+                                    correction de la question : même style que
+                                    le badge Quiz de la sidebar (fond teinté
+                                    léger + texte coloré). */}
+                                {correction && (
+                                    <p
+                                        className={cn(
+                                            'inline-flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold',
+                                            correction.is_correct
+                                                ? 'bg-success/10 text-success'
+                                                : 'bg-destructive/10 text-destructive',
+                                        )}
+                                    >
+                                        {correction.is_correct ? (
+                                            <CheckCircle2 className="size-4" />
+                                        ) : (
+                                            <XCircle className="size-4" />
+                                        )}
+                                        {correction.is_correct
+                                            ? 'Bonne réponse !'
+                                            : 'Mauvaise réponse'}
+                                    </p>
+                                )}
+
+                                {isReviewing ? (
+                                    <Button
+                                        size="lg"
+                                        className="rounded-full px-8"
+                                        onClick={restart}
+                                    >
+                                        <RotateCcw className="size-4" />
+                                        Recommencer
+                                    </Button>
+                                ) : correction ? (
+                                    isLastQuestion ? (
                                         <Button
                                             size="lg"
-                                            className="rounded-full"
+                                            className="rounded-full px-8"
+                                            disabled={processing}
+                                            onClick={submitAnswers}
+                                        >
+                                            <CheckCircle2 className="size-4" />
+                                            {processing
+                                                ? 'Correction en cours…'
+                                                : 'Voir mon résultat'}
+                                        </Button>
+                                    ) : (
+                                        <Button
+                                            size="lg"
+                                            className="rounded-full px-8"
                                             onClick={() =>
                                                 setStep(
                                                     (currentStep) =>
@@ -375,57 +476,31 @@ export default function LessonQuiz({
                                                 )
                                             }
                                         >
-                                            Suivant
-                                        </Button>
-                                    ) : (
-                                        <Button
-                                            size="lg"
-                                            variant="secondary"
-                                            className="rounded-full"
-                                            onClick={restart}
-                                        >
-                                            <RotateCcw className="size-4" />
-                                            Recommencer
+                                            Question suivante
+                                            <ArrowRight className="size-4" />
                                         </Button>
                                     )
-                                ) : step < questions.length - 1 ? (
-                                    <Button
-                                        size="lg"
-                                        className="rounded-full"
-                                        disabled={
-                                            !answers[current.id] || processing
-                                        }
-                                        onClick={() =>
-                                            setStep(
-                                                (currentStep) =>
-                                                    currentStep + 1,
-                                            )
-                                        }
-                                    >
-                                        Suivant
-                                    </Button>
                                 ) : (
                                     <Button
                                         size="lg"
-                                        className="rounded-full"
+                                        className="rounded-full px-8"
                                         disabled={
-                                            !answers[current.id] || processing
+                                            !answers[current.id] || validating
                                         }
-                                        onClick={submitAnswers}
+                                        onClick={validateCurrentAnswer}
                                     >
                                         <ListChecks className="size-4" />
-                                        {processing
-                                            ? 'Correction en cours…'
-                                            : 'Corriger mes réponses'}
+                                        {validating
+                                            ? 'Vérification…'
+                                            : 'Valider votre réponse'}
                                     </Button>
                                 )}
 
-                                {!isCorrecting &&
-                                    !answers[current.id] &&
-                                    step === questions.length - 1 && (
-                                        <p className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
-                                            <CircleDashed className="size-4" />
-                                            Choisis une réponse pour terminer.
+                                {!isReviewing &&
+                                    !correction &&
+                                    !answers[current.id] && (
+                                        <p className="text-sm text-muted-foreground">
+                                            Choisis une réponse pour valider.
                                         </p>
                                     )}
                             </div>
