@@ -1,15 +1,16 @@
 packages:
-  - '.'
+    - '.'
 
 publicHoistPattern:
-  - '@inertiajs/core'
+    - '@inertiajs/core'
 catalog:
-  vite: npm:@voidzero-dev/vite-plus-core@0.3.3
-  vite-plus: 0.3.3
+    vite: npm:@voidzero-dev/vite-plus-core@0.3.3
+    vite-plus: 0.3.3
 overrides:
-  vite@*: 'catalog:'
+    shell-quote: ^1.11.0
+    vite@*: 'catalog:'
 peerDependencyRules:
-  allowAny:
-    - vite
-  allowedVersions:
-    vite: '*'
+    allowAny:
+        - vite
+    allowedVersions:
+        vite: '*'

@@ -1,9 +1,7 @@
-import { evaluate } from '@mdx-js/mdx';
 import { useEffect, useState, type ElementType } from 'react';
-import remarkGfm from 'remark-gfm';
-import * as runtime from 'react/jsx-runtime';
 import { MdxErrorBoundary } from '@/components/mdx-error-boundary';
 import { mdxComponents } from '@/components/mdx-components';
+import { compileLessonMdx } from '@/lib/compile-lesson-mdx';
 
 type Props = {
     source: string;
@@ -17,7 +15,7 @@ type MdxContentComponent = (props?: {
 
 /**
  * Rend du MDX (markdown + JSX) stocké en BD, formaté, comme la leçon alphabet.
- * Le MDX admin est du contenu de confiance : evaluate est assumé.
+ * Les expressions et composants dangereux sont rejetés avant evaluate.
  */
 export function MdxContent({ source, components = mdxComponents }: Props) {
     const [Content, setContent] = useState<MdxContentComponent | null>(null);
@@ -32,7 +30,7 @@ export function MdxContent({ source, components = mdxComponents }: Props) {
         setContent(null);
         setError(null);
 
-        evaluate(source, { ...runtime, remarkPlugins: [remarkGfm] })
+        compileLessonMdx(source)
             .then((mod) => {
                 if (!cancelled) {
                     const Component =

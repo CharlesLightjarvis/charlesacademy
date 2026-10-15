@@ -1,43 +1,78 @@
 import { Info, Lightbulb, TriangleAlert } from 'lucide-react';
-import type {
-    ComponentPropsWithoutRef,
-    ComponentType,
-    ReactNode,
-} from 'react';
+import type { ComponentPropsWithoutRef, ComponentType, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 
-const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+const LETTER_NAMES: Record<string, string> = {
+    A: 'a',
+    B: 'bé',
+    C: 'tsé',
+    D: 'dé',
+    E: 'é',
+    F: 'èf',
+    G: 'gué',
+    H: 'ha',
+    I: 'i',
+    J: 'yot',
+    K: 'ka',
+    L: 'èl',
+    M: 'èm',
+    N: 'èn',
+    O: 'o',
+    P: 'pé',
+    Q: 'kou',
+    R: 'èr',
+    S: 'ès',
+    T: 'té',
+    U: 'ou',
+    V: 'faou',
+    W: 'vé',
+    X: 'iks',
+    Y: 'upsilon',
+    Z: 'tsett',
+    Ä: 'è',
+    Ö: 'eu',
+    Ü: 'u',
+    ß: 'ès-tsèt',
+};
+
+const ALPHABET = Object.keys(LETTER_NAMES);
 
 type LetterGridProps = {
-    /** Chaîne ou liste de lettres — par défaut les 26 lettres. */
+    /** Chaîne ou liste de lettres — par défaut l'alphabet allemand complet. */
     letters?: string | string[];
     className?: string;
 };
 
 /**
- * Les lettres de la leçon en petits carreaux (l'ancien rendu structuré de la
- * leçon alphabet), utilisable directement dans le MDX : `<LetterGrid />`.
+ * L'alphabet allemand et ses appellations, utilisable en MDX : `<LetterGrid />`.
  */
 export function LetterGrid({ letters = ALPHABET, className }: LetterGridProps) {
     const items =
         typeof letters === 'string'
-            ? letters.replace(/\s+/g, '').split('')
+            ? Array.from(letters.replace(/\s+/g, ''))
             : letters;
 
     return (
         <div
             className={cn(
-                'mdx-letters grid grid-cols-7 gap-2 sm:grid-cols-[repeat(13,minmax(0,1fr))]',
+                'mdx-letters not-prose grid grid-cols-4 gap-x-2 gap-y-3.5 sm:grid-cols-6 lg:grid-cols-10',
                 className,
             )}
         >
             {items.map((letter, index) => (
-                <span
+                <div
                     key={`${letter}-${index}`}
-                    className="flex aspect-square items-center justify-center rounded-xl border border-border bg-card font-display text-2xl font-semibold"
+                    className="flex min-w-0 flex-col items-center gap-1.5"
                 >
-                    {letter}
-                </span>
+                    {LETTER_NAMES[letter] && (
+                        <span className="inline-flex max-w-full items-center justify-center rounded-full bg-[#F7E6E8] px-2 py-1 font-display text-[15px] leading-none font-semibold whitespace-nowrap text-[#B42335]">
+                            {LETTER_NAMES[letter]}
+                        </span>
+                    )}
+                    <span className="flex aspect-square w-full items-center justify-center rounded-xl border border-border bg-card font-display text-[clamp(20px,2.5vw,30px)] leading-none font-bold text-card-foreground shadow-sm">
+                        {letter}
+                    </span>
+                </div>
             ))}
         </div>
     );
@@ -52,7 +87,11 @@ type CalloutProps = {
 
 const CALLOUT_TONES: Record<
     CalloutTone,
-    { className: string; iconClassName: string; icon: ComponentType<{ className?: string }> }
+    {
+        className: string;
+        iconClassName: string;
+        icon: ComponentType<{ className?: string }>;
+    }
 > = {
     tip: {
         className: 'border-primary/30 bg-primary/5',
@@ -73,8 +112,11 @@ const CALLOUT_TONES: Record<
 
 /** Encadré de leçon : `<Callout tone="tip">…</Callout>` (docs/mdx-lessons.md). */
 export function Callout({ tone = 'tip', children }: CalloutProps) {
-    const { className, iconClassName, icon: Icon } =
-        CALLOUT_TONES[tone] ?? CALLOUT_TONES.tip;
+    const {
+        className,
+        iconClassName,
+        icon: Icon,
+    } = CALLOUT_TONES[tone] ?? CALLOUT_TONES.tip;
 
     return (
         <aside
@@ -111,9 +153,7 @@ function MdxTable({ className, ...props }: ComponentPropsWithoutRef<'table'>) {
 }
 
 function MdxTableRow({ className, ...props }: ComponentPropsWithoutRef<'tr'>) {
-    return (
-        <tr className={cn('even:bg-muted/40', className)} {...props} />
-    );
+    return <tr className={cn('even:bg-muted/40', className)} {...props} />;
 }
 
 function MdxTableHeader({

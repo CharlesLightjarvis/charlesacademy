@@ -116,15 +116,24 @@ const mdxHighlightStyle = HighlightStyle.define([
     { tag: t.strikethrough, textDecoration: 'line-through' },
     { tag: t.link, color: 'var(--primary)' },
     { tag: t.url, color: 'var(--muted-foreground)' },
-    { tag: [t.comment, t.lineComment, t.quote], color: 'var(--muted-foreground)' },
+    {
+        tag: [t.comment, t.lineComment, t.quote],
+        color: 'var(--muted-foreground)',
+    },
     { tag: [t.tagName, t.angleBracket], color: 'var(--brand)' },
     { tag: t.attributeName, color: 'var(--info)' },
-    { tag: [t.attributeValue, t.string, t.special(t.string)], color: 'var(--success)' },
+    {
+        tag: [t.attributeValue, t.string, t.special(t.string)],
+        color: 'var(--success)',
+    },
     { tag: [t.number, t.bool, t.null], color: 'var(--warning)' },
     { tag: t.keyword, color: 'var(--brand)' },
     { tag: t.invalid, color: 'var(--destructive)' },
     { tag: t.list, color: 'var(--brand)' },
-    { tag: t.monospace, fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace' },
+    {
+        tag: t.monospace,
+        fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+    },
 ]);
 
 /* ---------- Autocompletion des composants de leçon ---------- */
@@ -139,8 +148,8 @@ const LESSON_TAG_COMPLETIONS = [
     snippetCompletion('LetterGrid />', {
         label: 'LetterGrid',
         type: 'function',
-        detail: 'Grille des 26 lettres',
-        info: 'Grille de lettres : <LetterGrid /> ou <LetterGrid letters="ABC…" />',
+        detail: 'Alphabet allemand avec prononciation',
+        info: 'Affiche les 30 lettres et leur nom : <LetterGrid />. Pour une sélection : <LetterGrid letters="ABC" />',
     }),
 ];
 

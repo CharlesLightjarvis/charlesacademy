@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ArrowLeft, ArrowRight, RotateCcw, Check } from "lucide-react";
+import { useState } from 'react';
+import { RotateCcw } from 'lucide-react';
 
 type Stage = {
     eyebrow: string;
@@ -10,62 +10,62 @@ type Stage = {
 
 const stages: Stage[] = [
     {
-        eyebrow: "01 / OBSERVER",
-        title: "Observer",
+        eyebrow: '01 / OBSERVER',
+        title: 'Observer',
         description:
             "Une phrase simple du quotidien. Observe comment les mots s'assemblent.",
         note: "Repère l'article devant le nom.",
     },
     {
-        eyebrow: "02 / COMPRENDRE",
-        title: "Comprendre",
+        eyebrow: '02 / COMPRENDRE',
+        title: 'Comprendre',
         description:
-            "Hund est un nom masculin. Au nominatif, son article défini est der.",
-        note: "der + Hund = der Hund",
+            'Hund est un nom masculin. Au nominatif, son article défini est der.',
+        note: 'der + Hund = der Hund',
     },
     {
-        eyebrow: "03 / RÉUTILISER",
-        title: "Réutiliser",
+        eyebrow: '03 / RÉUTILISER',
+        title: 'Réutiliser',
         description:
             "Applique cette règle à d'autres noms masculins : der Mann, der Tisch, der Hund.",
-        note: "Une règle, plusieurs applications.",
+        note: 'Une règle, plusieurs applications.',
     },
 ];
 
 const vocabulary = [
     {
-        word: "Der",
-        translation: "Le",
-        label: "Article défini",
+        word: 'Der',
+        translation: 'Le',
+        label: 'Article défini',
         explanation:
-            "Article masculin au nominatif. Il accompagne le nom Hund.",
+            'Article masculin au nominatif. Il accompagne le nom Hund.',
     },
     {
-        word: "Hund",
-        translation: "Chien",
-        label: "Nom masculin",
+        word: 'Hund',
+        translation: 'Chien',
+        label: 'Nom masculin',
         explanation:
-            "Hund signifie chien. En allemand, les noms communs prennent une majuscule.",
+            'Hund signifie chien. En allemand, les noms communs prennent une majuscule.',
     },
     {
-        word: "spielt",
-        translation: "Joue",
-        label: "Verbe",
+        word: 'spielt',
+        translation: 'Joue',
+        label: 'Verbe',
         explanation:
-            "Forme du verbe spielen à la troisième personne du singulier.",
+            'Forme du verbe spielen à la troisième personne du singulier.',
     },
     {
-        word: "im",
-        translation: "Dans le",
-        label: "Préposition contractée",
+        word: 'im',
+        translation: 'Dans le',
+        label: 'Préposition contractée',
         explanation:
-            "Contraction de in + dem, utilisée ici pour indiquer un lieu.",
+            'Contraction de in + dem, utilisée ici pour indiquer un lieu.',
     },
     {
-        word: "Garten.",
-        translation: "Jardin",
-        label: "Nom masculin",
-        explanation: "Garten signifie jardin. Son article défini est der.",
+        word: 'Garten.',
+        translation: 'Jardin',
+        label: 'Nom masculin',
+        explanation: 'Garten signifie jardin. Son article défini est der.',
     },
 ];
 
@@ -86,7 +86,7 @@ export default function TeachingMethod() {
         <section
             id="methode"
             aria-labelledby="method-heading"
-            className="border-t border-border  px-5 py-14 sm:px-8 lg:py-20"
+            className="border-t border-border px-5 py-14 sm:px-8 lg:py-20"
         >
             <div className="mx-auto max-w-7xl">
                 {/* CENTERED SECTION HEADER */}
@@ -96,7 +96,7 @@ export default function TeachingMethod() {
                         id="method-heading"
                         className="mt-6 font-display text-5xl leading-[1.1] font-semibold tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
                     >
-                        Une règle comprise.{" "}
+                        Une règle comprise.{' '}
                         <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
                             Mille possibilités.
                         </span>
@@ -129,8 +129,8 @@ export default function TeachingMethod() {
                                     onClick={() => goToStage(index)}
                                     className={`relative px-2 py-4 text-center transition-colors duration-300 sm:px-5 ${
                                         active
-                                            ? "text-primary"
-                                            : "text-muted-foreground hover:text-foreground"
+                                            ? 'text-primary'
+                                            : 'text-muted-foreground hover:text-foreground'
                                     }`}
                                 >
                                     <span className="block text-[10px] font-bold tracking-widest opacity-70">
@@ -152,7 +152,7 @@ export default function TeachingMethod() {
                     {/* MAIN SENTENCE */}
 
                     <div className="px-4 py-7 text-center sm:py-10">
-                        <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
+                        <p className="text-xs font-semibold tracking-[0.2em] text-primary uppercase">
                             {current.eyebrow}
                         </p>
 
@@ -162,7 +162,7 @@ export default function TeachingMethod() {
 
                         <div
                             lang="de"
-                            className="mt-6 flex flex-wrap items-baseline justify-center gap-x-[0.22em] gap-y-2 font-display text-[clamp(2rem,5vw,4.5rem)] font-semibold leading-tight tracking-tight"
+                            className="mt-6 flex flex-wrap items-baseline justify-center gap-x-[0.22em] gap-y-2 font-display text-[clamp(2rem,5vw,4.5rem)] leading-tight font-semibold tracking-tight"
                         >
                             {vocabulary.map((item, index) => {
                                 const isSelected = selectedWord === index;
@@ -186,10 +186,10 @@ export default function TeachingMethod() {
                                         }
                                         className={`relative rounded-lg px-1.5 py-1 transition-[color,background-color,transform] duration-300 ${
                                             highlight
-                                                ? "bg-brand-soft text-brand-soft-foreground"
-                                                : "text-foreground hover:text-primary"
+                                                ? 'bg-brand-soft text-brand-soft-foreground'
+                                                : 'text-foreground hover:text-primary'
                                         } ${
-                                            isSelected ? "-translate-y-0.5" : ""
+                                            isSelected ? '-translate-y-0.5' : ''
                                         }`}
                                     >
                                         {item.word}
@@ -219,7 +219,7 @@ export default function TeachingMethod() {
                     >
                         <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center gap-3">
-                                <span className="text-xs font-bold uppercase tracking-wider text-primary">
+                                <span className="text-xs font-bold tracking-wider text-primary uppercase">
                                     {activeWord
                                         ? activeWord.translation
                                         : current.note}

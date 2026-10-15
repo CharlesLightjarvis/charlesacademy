@@ -13,11 +13,11 @@ return new class extends Migration
     {
         Schema::create('lesson_progress', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignUuid('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('lesson_id')->constrained()->cascadeOnDelete();
             $table->boolean('is_read')->default(false);
-            $table->unsignedTinyInteger('score')->nullable();
-            $table->unsignedTinyInteger('best_score')->nullable();
+            $table->unsignedInteger('score')->nullable();
+            $table->unsignedInteger('best_score')->nullable();
             $table->timestamp('completed_at')->nullable();
             $table->timestamps();
 

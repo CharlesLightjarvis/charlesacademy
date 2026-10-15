@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
     ArrowRight,
     BookOpen,
@@ -11,61 +11,61 @@ import {
     LayoutDashboard,
     RotateCcw,
     TrendingUp,
-} from "lucide-react";
+} from 'lucide-react';
 
 const navigation = [
-    { id: "dashboard", label: "Tableau de bord", icon: LayoutDashboard },
-    { id: "courses", label: "Activités", icon: BookOpen },
-    { id: "lesson", label: "Une leçon", icon: BookText },
-    { id: "quiz", label: "Quiz", icon: CircleHelp },
-    { id: "progress", label: "Progression", icon: TrendingUp },
+    { id: 'dashboard', label: 'Tableau de bord', icon: LayoutDashboard },
+    { id: 'courses', label: 'Activités', icon: BookOpen },
+    { id: 'lesson', label: 'Une leçon', icon: BookText },
+    { id: 'quiz', label: 'Quiz', icon: CircleHelp },
+    { id: 'progress', label: 'Progression', icon: TrendingUp },
 ] as const;
 
-type View = (typeof navigation)[number]["id"];
+type View = (typeof navigation)[number]['id'];
 
 const demoCourses = [
     {
-        title: "Premiers pas en allemand",
-        level: "A1",
-        subject: "Découvrir les bases",
+        title: 'Premiers pas en allemand',
+        level: 'A1',
+        subject: 'Découvrir les bases',
         lessons: 8,
     },
     {
-        title: "Les articles et les noms",
-        level: "A1",
-        subject: "Comprendre la grammaire",
+        title: 'Les articles et les noms',
+        level: 'A1',
+        subject: 'Comprendre la grammaire',
         lessons: 12,
     },
     {
-        title: "Parler au quotidien",
-        level: "A2",
-        subject: "Construire des phrases",
+        title: 'Parler au quotidien',
+        level: 'A2',
+        subject: 'Construire des phrases',
         lessons: 10,
     },
     {
-        title: "Exprimer ses idées",
-        level: "B1",
-        subject: "Développer son expression",
+        title: 'Exprimer ses idées',
+        level: 'B1',
+        subject: 'Développer son expression',
         lessons: 14,
     },
 ] as const;
 
 const quiz = {
-    question: "___ Hund spielt im Garten.",
-    answers: ["Der", "Die", "Das"],
+    question: '___ Hund spielt im Garten.',
+    answers: ['Der', 'Die', 'Das'],
     correct: 0,
 };
 
 export default function PlatformPreview() {
-    const [view, setView] = useState<View>("dashboard");
-    const [level, setLevel] = useState("Tous");
+    const [view, setView] = useState<View>('dashboard');
+    const [level, setLevel] = useState('Tous');
     const [answer, setAnswer] = useState<number | null>(null);
     const [lessonPage, setLessonPage] = useState(0);
 
     const activeIndex = navigation.findIndex((item) => item.id === view);
 
     const filteredCourses = demoCourses.filter(
-        (course) => level === "Tous" || course.level === level,
+        (course) => level === 'Tous' || course.level === level,
     );
 
     function navigate(next: View) {
@@ -81,7 +81,7 @@ export default function PlatformPreview() {
         <section
             id="plateforme"
             aria-labelledby="platform-heading"
-            className="relative overflow-hidden border-t border-border  px-5 py-16 sm:px-8 lg:py-24"
+            className="relative overflow-hidden border-t border-border px-5 py-16 sm:px-8 lg:py-24"
         >
             <div className="mx-auto max-w-7xl">
                 {/* HEADING */}
@@ -89,9 +89,9 @@ export default function PlatformPreview() {
                 <div className="mx-auto max-w-5xl text-center">
                     <h2
                         id="platform-heading"
-                        className="mt-6 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
+                        className="mt-6 font-display text-5xl leading-[1.1] font-semibold tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
                     >
-                        Un espace pour pratiquer.{" "}
+                        Un espace pour pratiquer.{' '}
                         <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
                             À ton rythme.
                         </span>
@@ -118,7 +118,7 @@ export default function PlatformPreview() {
                                 <p className="font-display text-lg font-semibold text-foreground">
                                     CharlesAcademy
                                 </p>
-                                <p className="text-[10px] font-medium uppercase tracking-widest text-muted-foreground">
+                                <p className="text-[10px] font-medium tracking-widest text-muted-foreground uppercase">
                                     Espace apprenant · Démo
                                 </p>
                             </div>
@@ -144,8 +144,8 @@ export default function PlatformPreview() {
                                     aria-pressed={view === item.id}
                                     className={`flex shrink-0 items-center gap-2 rounded-lg px-3 py-2.5 text-xs font-semibold transition-colors ${
                                         view === item.id
-                                            ? "bg-primary text-primary-foreground"
-                                            : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                                            ? 'bg-primary text-primary-foreground'
+                                            : 'text-muted-foreground hover:bg-accent hover:text-foreground'
                                     }`}
                                 >
                                     <Icon className="size-4" />
@@ -162,7 +162,7 @@ export default function PlatformPreview() {
                             aria-label="Explorer la plateforme"
                             className="hidden w-60 shrink-0 flex-col border-r border-border bg-muted/30 px-3 py-6 lg:flex"
                         >
-                            <p className="mb-5 px-4 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
+                            <p className="mb-5 px-4 text-[10px] font-bold tracking-[0.2em] text-muted-foreground uppercase">
                                 Explorer
                             </p>
 
@@ -177,12 +177,12 @@ export default function PlatformPreview() {
                                             type="button"
                                             onClick={() => navigate(item.id)}
                                             aria-current={
-                                                active ? "page" : undefined
+                                                active ? 'page' : undefined
                                             }
                                             className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition-colors ${
                                                 active
-                                                    ? "bg-primary text-primary-foreground"
-                                                    : "text-muted-foreground hover:bg-accent hover:text-foreground"
+                                                    ? 'bg-primary text-primary-foreground'
+                                                    : 'text-muted-foreground hover:bg-accent hover:text-foreground'
                                             }`}
                                         >
                                             <Icon className="size-[18px]" />
@@ -208,10 +208,10 @@ export default function PlatformPreview() {
                         <main className="min-w-0 flex-1 px-5 py-7 sm:px-9 sm:py-9">
                             {/* DASHBOARD */}
 
-                            {view === "dashboard" && (
+                            {view === 'dashboard' && (
                                 <div className="space-y-7">
                                     <div>
-                                        <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                                        <p className="text-xs font-semibold tracking-widest text-primary uppercase">
                                             Mon espace
                                         </p>
 
@@ -240,7 +240,7 @@ export default function PlatformPreview() {
                                             <button
                                                 type="button"
                                                 onClick={() =>
-                                                    navigate("lesson")
+                                                    navigate('lesson')
                                                 }
                                                 className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-transform hover:scale-[1.02]"
                                             >
@@ -287,9 +287,9 @@ export default function PlatformPreview() {
 
                             {/* COURSE CATALOG */}
 
-                            {view === "courses" && (
+                            {view === 'courses' && (
                                 <div>
-                                    <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                                    <p className="text-xs font-semibold tracking-widest text-primary uppercase">
                                         Activités
                                     </p>
 
@@ -307,7 +307,7 @@ export default function PlatformPreview() {
                                         aria-label="Filtrer par niveau"
                                         className="mt-6 flex flex-wrap gap-2"
                                     >
-                                        {["Tous", "A1", "A2", "B1"].map(
+                                        {['Tous', 'A1', 'A2', 'B1'].map(
                                             (item) => (
                                                 <button
                                                     key={item}
@@ -320,8 +320,8 @@ export default function PlatformPreview() {
                                                     }
                                                     className={`rounded-full border px-4 py-2 text-xs font-semibold transition-colors ${
                                                         level === item
-                                                            ? "border-primary bg-primary text-primary-foreground"
-                                                            : "border-border text-muted-foreground hover:border-primary hover:text-primary"
+                                                            ? 'border-primary bg-primary text-primary-foreground'
+                                                            : 'border-border text-muted-foreground hover:border-primary hover:text-primary'
                                                     }`}
                                                 >
                                                     {item}
@@ -336,7 +336,7 @@ export default function PlatformPreview() {
                                                 key={course.title}
                                                 type="button"
                                                 onClick={() =>
-                                                    navigate("lesson")
+                                                    navigate('lesson')
                                                 }
                                                 className="group flex w-full items-center justify-between gap-4 py-4 text-left transition-colors hover:text-primary"
                                             >
@@ -351,8 +351,8 @@ export default function PlatformPreview() {
                                                         </h4>
 
                                                         <p className="mt-0.5 text-xs text-muted-foreground">
-                                                            {course.subject} ·{" "}
-                                                            {course.lessons}{" "}
+                                                            {course.subject} ·{' '}
+                                                            {course.lessons}{' '}
                                                             leçons
                                                         </p>
                                                     </div>
@@ -367,10 +367,10 @@ export default function PlatformPreview() {
 
                             {/* LESSON */}
 
-                            {view === "lesson" && (
+                            {view === 'lesson' && (
                                 <div className="mx-auto max-w-2xl">
                                     <div className="flex flex-wrap items-center justify-between gap-3">
-                                        <span className="text-xs font-semibold uppercase tracking-widest text-primary">
+                                        <span className="text-xs font-semibold tracking-widest text-primary uppercase">
                                             Leçon interactive
                                         </span>
 
@@ -394,20 +394,20 @@ export default function PlatformPreview() {
                                     >
                                         {lessonPage === 0 ? (
                                             <>
-                                                <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                                                <p className="text-xs font-semibold tracking-widest text-primary uppercase">
                                                     Les trois articles
                                                 </p>
 
                                                 <p
                                                     lang="de"
-                                                    className="mt-5 font-display text-4xl font-semibold leading-relaxed sm:text-5xl"
+                                                    className="mt-5 font-display text-4xl leading-relaxed font-semibold sm:text-5xl"
                                                 >
                                                     <span className="text-primary">
                                                         der
                                                     </span>
-                                                    {" · "}
+                                                    {' · '}
                                                     die
-                                                    {" · "}
+                                                    {' · '}
                                                     das
                                                 </p>
 
@@ -419,7 +419,7 @@ export default function PlatformPreview() {
                                             </>
                                         ) : (
                                             <>
-                                                <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                                                <p className="text-xs font-semibold tracking-widest text-primary uppercase">
                                                     Exemple concret
                                                 </p>
 
@@ -429,7 +429,7 @@ export default function PlatformPreview() {
                                                 >
                                                     <span className="text-primary">
                                                         Der Hund
-                                                    </span>{" "}
+                                                    </span>{' '}
                                                     spielt.
                                                 </p>
 
@@ -452,14 +452,14 @@ export default function PlatformPreview() {
                                             className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground"
                                         >
                                             {lessonPage === 0
-                                                ? "Voir un exemple"
-                                                : "Revoir la règle"}
+                                                ? 'Voir un exemple'
+                                                : 'Revoir la règle'}
                                             <ArrowRight className="size-4" />
                                         </button>
 
                                         <button
                                             type="button"
-                                            onClick={() => navigate("quiz")}
+                                            onClick={() => navigate('quiz')}
                                             className="rounded-full border border-border px-5 py-3 text-sm font-semibold text-foreground hover:bg-accent"
                                         >
                                             Tester mes connaissances
@@ -470,9 +470,9 @@ export default function PlatformPreview() {
 
                             {/* QUIZ */}
 
-                            {view === "quiz" && (
+                            {view === 'quiz' && (
                                 <div className="mx-auto max-w-2xl">
-                                    <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                                    <p className="text-xs font-semibold tracking-widest text-primary uppercase">
                                         Quiz · Grammaire A1
                                     </p>
 
@@ -486,21 +486,21 @@ export default function PlatformPreview() {
 
                                     <p
                                         lang="de"
-                                        className="mt-5 font-display text-3xl font-semibold leading-tight sm:text-4xl"
+                                        className="mt-5 font-display text-3xl leading-tight font-semibold sm:text-4xl"
                                     >
                                         <span
                                             className={
                                                 answer === null
-                                                    ? "text-primary"
+                                                    ? 'text-primary'
                                                     : answer === quiz.correct
-                                                      ? "text-primary"
-                                                      : "text-destructive"
+                                                      ? 'text-primary'
+                                                      : 'text-destructive'
                                             }
                                         >
                                             {answer === null
-                                                ? "___"
+                                                ? '___'
                                                 : quiz.answers[answer]}
-                                        </span>{" "}
+                                        </span>{' '}
                                         Hund spielt im Garten.
                                     </p>
 
@@ -514,9 +514,9 @@ export default function PlatformPreview() {
                                                 className={`min-w-24 rounded-xl border-2 px-5 py-3 font-display text-xl font-semibold transition-colors ${
                                                     answer === i
                                                         ? i === quiz.correct
-                                                            ? "border-primary bg-primary text-primary-foreground"
-                                                            : "border-destructive bg-destructive/10 text-destructive"
-                                                        : "border-border text-foreground hover:border-primary"
+                                                            ? 'border-primary bg-primary text-primary-foreground'
+                                                            : 'border-destructive bg-destructive/10 text-destructive'
+                                                        : 'border-border text-foreground hover:border-primary'
                                                 }`}
                                             >
                                                 {option}
@@ -538,8 +538,8 @@ export default function PlatformPreview() {
 
                                                 <p className="text-sm leading-relaxed text-foreground">
                                                     {answer === quiz.correct
-                                                        ? "Richtig! Hund est masculin : der Hund."
-                                                        : "Pas tout à fait. Hund est masculin au nominatif. Essaie encore."}
+                                                        ? 'Richtig! Hund est masculin : der Hund.'
+                                                        : 'Pas tout à fait. Hund est masculin au nominatif. Essaie encore.'}
                                                 </p>
                                             </div>
                                         )}
@@ -558,9 +558,9 @@ export default function PlatformPreview() {
 
                             {/* PROGRESS */}
 
-                            {view === "progress" && (
+                            {view === 'progress' && (
                                 <div>
-                                    <p className="text-xs font-semibold uppercase tracking-widest text-primary">
+                                    <p className="text-xs font-semibold tracking-widest text-primary uppercase">
                                         Suivi pédagogique
                                     </p>
 
@@ -596,8 +596,8 @@ export default function PlatformPreview() {
                                                     <div
                                                         className={`w-full rounded-t-md transition-[height] duration-500 ${
                                                             i === 6
-                                                                ? "bg-primary"
-                                                                : "bg-primary/25"
+                                                                ? 'bg-primary'
+                                                                : 'bg-primary/25'
                                                         }`}
                                                         style={{
                                                             height: `${height}%`,
@@ -610,13 +610,13 @@ export default function PlatformPreview() {
 
                                     <div className="mt-3 grid grid-cols-7 gap-3 text-center text-[10px] text-muted-foreground sm:gap-5">
                                         {[
-                                            "L",
-                                            "M",
-                                            "M",
-                                            "J",
-                                            "V",
-                                            "S",
-                                            "D",
+                                            'L',
+                                            'M',
+                                            'M',
+                                            'J',
+                                            'V',
+                                            'S',
+                                            'D',
                                         ].map((day, i) => (
                                             <span key={i}>{day}</span>
                                         ))}
@@ -644,8 +644,8 @@ export default function PlatformPreview() {
                             className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-foreground"
                         >
                             {activeIndex === navigation.length - 1
-                                ? "Recommencer la visite"
-                                : "Explorer la suite"}
+                                ? 'Recommencer la visite'
+                                : 'Explorer la suite'}
                             <ArrowRight className="size-4" />
                         </button>
                     </div>

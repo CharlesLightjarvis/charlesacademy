@@ -1,7 +1,5 @@
-import { evaluate } from '@mdx-js/mdx';
 import { useEffect, useState, type ElementType } from 'react';
-import remarkGfm from 'remark-gfm';
-import * as runtime from 'react/jsx-runtime';
+import { compileLessonMdx } from '@/lib/compile-lesson-mdx';
 
 export type MdxContentProps = {
     components?: Record<string, ElementType>;
@@ -41,7 +39,7 @@ export function useMdxPreview(source: string, delay = 300): MdxPreviewState {
         setState((s) => ({ ...s, compiling: true }));
 
         const timer = window.setTimeout(() => {
-            evaluate(source, { ...runtime, remarkPlugins: [remarkGfm] })
+            compileLessonMdx(source)
                 .then((mod) => {
                     if (cancelled) {
                         return;

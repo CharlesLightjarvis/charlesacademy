@@ -39,14 +39,10 @@ class HandleInertiaRequests extends Middleware
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user()?->only('id', 'name', 'email', 'email_verified_at', 'created_at', 'updated_at', 'learning_level'),
                 'permissions' => $request->user()?->getAllPermissions()->pluck('name')->all() ?? [],
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
-            'flash' => [
-                // Résultat du dernier quiz soumis (consommé par learner/learn/show).
-                'quizResult' => $request->session()->get('quizResult'),
-            ],
         ];
     }
 }

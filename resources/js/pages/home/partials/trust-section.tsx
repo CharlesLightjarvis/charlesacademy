@@ -1,6 +1,5 @@
-import { useState } from "react";
+import { useState } from 'react';
 import {
-    ArrowRight,
     BookOpen,
     Check,
     ChevronDown,
@@ -8,7 +7,7 @@ import {
     HeartHandshake,
     Lightbulb,
     Users,
-} from "lucide-react";
+} from 'lucide-react';
 
 type Commitment = {
     number: string;
@@ -19,24 +18,24 @@ type Commitment = {
 
 const commitments: Commitment[] = [
     {
-        number: "01",
-        title: "Comprendre avant de mémoriser",
+        number: '01',
+        title: 'Comprendre avant de mémoriser',
         description:
-            "Découvrir une notion, comprendre sa logique, puis la retrouver dans des exemples concrets plutôt que simplement apprendre une règle par cœur.",
+            'Découvrir une notion, comprendre sa logique, puis la retrouver dans des exemples concrets plutôt que simplement apprendre une règle par cœur.',
         icon: Lightbulb,
     },
     {
-        number: "02",
-        title: "Apprendre en pratiquant",
+        number: '02',
+        title: 'Apprendre en pratiquant',
         description:
             "Passer de l'explication à l'application avec des exercices et des situations qui donnent du sens aux connaissances acquises.",
         icon: BookOpen,
     },
     {
-        number: "03",
-        title: "Avancer progressivement",
+        number: '03',
+        title: 'Avancer progressivement',
         description:
-            "Construire les acquis étape par étape, avec des objectifs compréhensibles et une difficulté adaptée à chaque niveau.",
+            'Construire les acquis étape par étape, avec des objectifs compréhensibles et une difficulté adaptée à chaque niveau.',
         icon: GraduationCap,
     },
 ];
@@ -69,7 +68,7 @@ export default function TrustSection() {
         <section
             id="confiance"
             aria-labelledby="trust-heading"
-            className="relative overflow-hidden border-t border-border  px-5 py-16 sm:px-8 lg:py-24"
+            className="relative overflow-hidden border-t border-border px-5 py-16 sm:px-8 lg:py-24"
         >
             <div className="mx-auto max-w-7xl">
                 {/* ================================
@@ -77,7 +76,7 @@ export default function TrustSection() {
                    ================================ */}
 
                 <div className="mx-auto max-w-5xl text-center">
-                    <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
+                    <p className="text-xs font-bold tracking-[0.28em] text-primary uppercase">
                         Une approche concrète
                     </p>
 
@@ -85,7 +84,7 @@ export default function TrustSection() {
                         id="trust-heading"
                         className="mt-6 font-display text-5xl leading-[1.1] font-semibold tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
                     >
-                        Apprendre avec méthode.{" "}
+                        Apprendre avec méthode.{' '}
                         <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
                             Progresser avec confiance.
                         </span>
@@ -106,12 +105,12 @@ export default function TrustSection() {
                     {/* LEFT — MANIFESTO */}
 
                     <div className="lg:sticky lg:top-24">
-                        <div className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
+                        <div className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-primary uppercase">
                             <HeartHandshake className="size-4" />
                             L'idée derrière CharlesAcademy
                         </div>
 
-                        <p className="mt-6 max-w-lg font-display text-3xl font-semibold leading-[1.25] tracking-tight text-foreground sm:text-4xl">
+                        <p className="mt-6 max-w-lg font-display text-3xl leading-[1.25] font-semibold tracking-tight text-foreground sm:text-4xl">
                             L'allemand ne devrait pas être une suite de règles
                             difficiles à retenir.
                         </p>
@@ -178,8 +177,8 @@ export default function TrustSection() {
                                         <ChevronDown
                                             className={`size-5 shrink-0 text-muted-foreground transition-transform duration-300 ${
                                                 isExpanded
-                                                    ? "rotate-180 text-primary"
-                                                    : ""
+                                                    ? 'rotate-180 text-primary'
+                                                    : ''
                                             }`}
                                         />
                                     </button>
@@ -208,7 +207,7 @@ export default function TrustSection() {
                     <div className="mt-16 border-t border-border pt-10">
                         <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
                             <div>
-                                <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+                                <p className="text-xs font-bold tracking-[0.2em] text-primary uppercase">
                                     L'équipe pédagogique
                                 </p>
 
@@ -258,7 +257,7 @@ export default function TrustSection() {
 
                 {testimonials.length > 0 && (
                     <div className="mt-14 border-t border-border pt-10">
-                        <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+                        <p className="text-xs font-bold tracking-[0.2em] text-primary uppercase">
                             Témoignages d'apprenants
                         </p>
 

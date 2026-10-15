@@ -1,4 +1,5 @@
-import { Head, Link, useForm } from '@inertiajs/react';
+import { HttpResponseError } from '@inertiajs/core';
+import { Head, Link, useForm, useHttp, usePage } from '@inertiajs/react';
 import {
     ArrowLeft,
     ArrowRight,
@@ -45,7 +46,6 @@ type Props = {
     questions: Question[];
     bestScore: number | null;
     modules: LearnModule[];
-    flash?: { quizResult?: QuizResult | null };
 };
 
 export default function LessonQuiz({
@@ -58,27 +58,32 @@ export default function LessonQuiz({
     questions,
     bestScore: initialBestScore,
     modules,
-    flash,
 }: Props) {
     const [step, setStep] = useState(0);
     const [answers, setAnswers] = useState<Record<string, string>>({});
     const [corrections, setCorrections] = useState<Record<string, Correction>>(
         {},
     );
-    const [validating, setValidating] = useState(false);
     const [validationError, setValidationError] = useState<string | null>(null);
     const [result, setResult] = useState<QuizResult | null>(null);
     const { post, processing, errors, transform } = useForm();
+    const answerRequest = useHttp<
+        { question_id: string; answer: string },
+        Correction
+    >({ question_id: '', answer: '' });
+    const quizResult = (
+        usePage().flash as { quizResult?: QuizResult | null } | undefined
+    )?.quizResult;
 
     // La correction finale revient par le flash après la soumission.
     useEffect(() => {
-        if (flash?.quizResult) {
-            setResult(flash.quizResult);
+        if (quizResult) {
+            setResult(quizResult);
         }
-    }, [flash?.quizResult]);
+    }, [quizResult]);
 
     const current = questions[step];
-    // Chaque réponse est corrigée au fil du eau ; après la soumission, le
+    // Chaque réponse est corrigée au fil de l'eau ; après la soumission, le
     // flash complète les corrections (la page vient d'être rechargée).
     const correction =
         corrections[current.id] ?? result?.corrections[current.id];
@@ -97,48 +102,57 @@ export default function LessonQuiz({
     async function validateCurrentAnswer() {
         const selected = answers[current.id];
 
-        if (!selected || validating) {
+        if (!selected || answerRequest.processing) {
             return;
         }
 
-        setValidating(true);
         setValidationError(null);
 
         try {
-            const response = await fetch(
+            answerRequest.transform(() => ({
+                question_id: current.id,
+                answer: selected,
+            }));
+            const validated = await answerRequest.post(
                 quizValidate.url({ module: module.id, lesson: lesson.id }),
                 {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json',
-                        'X-Requested-With': 'XMLHttpRequest',
-                        'X-CSRF-TOKEN':
-                            document
-                                .querySelector('meta[name="csrf-token"]')
-                                ?.getAttribute('content') ?? '',
+                    onError: (validationErrors) => {
+                        setValidationError(
+                            validationErrors.answer ??
+                                'Cette réponse n’est pas valide.',
+                        );
                     },
-                    body: JSON.stringify({
-                        question_id: current.id,
-                        answer: selected,
-                    }),
                 },
             );
 
-            if (!response.ok) {
-                throw new Error('La validation a échoué.');
+            if (!validated) {
+                return;
             }
-
-            const validated: Correction = await response.json();
 
             setCorrections((previous) => ({
                 ...previous,
                 [current.id]: validated,
             }));
-        } catch {
-            setValidationError('La vérification a échoué, réessaie.');
-        } finally {
-            setValidating(false);
+        } catch (error) {
+            if (error instanceof HttpResponseError) {
+                if (error.response.status === 419) {
+                    setValidationError(
+                        'Ta session a expiré. Recharge la page et réessaie.',
+                    );
+                } else if ([401, 403].includes(error.response.status)) {
+                    setValidationError(
+                        'Reconnecte-toi pour continuer le quiz.',
+                    );
+                } else if (error.response.status === 404) {
+                    setValidationError(
+                        'Cette question n’est plus disponible. Recharge la page.',
+                    );
+                } else {
+                    setValidationError('La vérification a échoué, réessaie.');
+                }
+            } else {
+                setValidationError('Connexion interrompue. Réessaie.');
+            }
         }
     }
 
@@ -485,12 +499,13 @@ export default function LessonQuiz({
                                         size="lg"
                                         className="rounded-full px-8"
                                         disabled={
-                                            !answers[current.id] || validating
+                                            !answers[current.id] ||
+                                            answerRequest.processing
                                         }
                                         onClick={validateCurrentAnswer}
                                     >
                                         <ListChecks className="size-4" />
-                                        {validating
+                                        {answerRequest.processing
                                             ? 'Vérification…'
                                             : 'Valider votre réponse'}
                                     </Button>

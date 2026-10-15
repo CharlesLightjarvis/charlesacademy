@@ -1,6 +1,6 @@
 /**
  * Types du parcours étudiant — alignés sur la base (levels, modules,
- * lessons, lesson_progress) via LearnController.
+ * lessons, lesson_progress) via les contrôleurs du parcours étudiant.
  */
 
 export type LevelCode = 'A1' | 'A2' | 'B1' | 'B2';

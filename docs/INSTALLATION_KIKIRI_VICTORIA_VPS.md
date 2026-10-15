@@ -267,17 +267,17 @@ Ouvrir ensuite le MP3 dans **Téléchargements** et comparer la prononciation, l
 
 ## Récapitulatif de l'installation validée
 
-| Élément | Configuration fonctionnelle |
-|---|---|
-| Modèle | `kikiri-tts/kikiri-german-victoria` (poids `.pth` originaux) |
-| Voix | `voices/victoria.pt` |
-| Moteur | Fork `semidark/kokoro` inclus comme sous-module de `semidark/kikiri-tts` |
-| G2P allemand | Fork `semidark/misaki` avec `misaki.de.DEG2P` |
-| Langue Kokoro | `lang_code="d"` |
-| Calcul | PyTorch CPU, 2 threads |
-| Génération | `KPipeline(text, voice=voice, speed=1.0)` |
-| Sortie WAV | `output/victoria-original-paragraphe.wav` (24 kHz) |
-| Sortie MP3 | `output/victoria-original-paragraphe.mp3` (96 kb/s) |
-| Récupération | `scp` depuis PowerShell Windows |
+| Élément       | Configuration fonctionnelle                                              |
+| ------------- | ------------------------------------------------------------------------ |
+| Modèle        | `kikiri-tts/kikiri-german-victoria` (poids `.pth` originaux)             |
+| Voix          | `voices/victoria.pt`                                                     |
+| Moteur        | Fork `semidark/kokoro` inclus comme sous-module de `semidark/kikiri-tts` |
+| G2P allemand  | Fork `semidark/misaki` avec `misaki.de.DEG2P`                            |
+| Langue Kokoro | `lang_code="d"`                                                          |
+| Calcul        | PyTorch CPU, 2 threads                                                   |
+| Génération    | `KPipeline(text, voice=voice, speed=1.0)`                                |
+| Sortie WAV    | `output/victoria-original-paragraphe.wav` (24 kHz)                       |
+| Sortie MP3    | `output/victoria-original-paragraphe.mp3` (96 kb/s)                      |
+| Récupération  | `scp` depuis PowerShell Windows                                          |
 
 **Note de reproductibilité :** les dépôts GitHub et paquets Python évoluent. Pour une reproduction exacte sur un autre VPS, figer les commits des sous-modules et les versions Python/PyTorch/Misaki après installation. Les étapes ci-dessus documentent le parcours qui a fonctionné sur le VPS testé ; elles ne constituent pas un script de déploiement de production.

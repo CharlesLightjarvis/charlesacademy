@@ -58,10 +58,7 @@ export default function ModuleFormFields({
                     </SelectTrigger>
                     <SelectContent>
                         {levels.map((level) => (
-                            <SelectItem
-                                key={level.id}
-                                value={String(level.id)}
-                            >
+                            <SelectItem key={level.id} value={String(level.id)}>
                                 {level.code} — {level.name}
                             </SelectItem>
                         ))}

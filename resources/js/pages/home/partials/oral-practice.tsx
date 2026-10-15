@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from 'react';
 import {
     ArrowRight,
     AudioLines,
@@ -9,11 +9,11 @@ import {
     MicOff,
     RotateCcw,
     Volume2,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
-type Level = "A1" | "A2" | "B1" | "B2";
+type Level = 'A1' | 'A2' | 'B1' | 'B2';
 type Challenge = {
     question: string;
     prompt: string;
@@ -25,74 +25,74 @@ type Challenge = {
 const challenges: Record<Level, Challenge[]> = {
     A1: [
         {
-            question: "Wie heißt du und woher kommst du?",
+            question: 'Wie heißt du und woher kommst du?',
             prompt: "Dis ton prénom et d'où tu viens.",
-            example: "Ich heiße Alex und komme aus Lagos.",
+            example: 'Ich heiße Alex und komme aus Lagos.',
             translation: "Je m'appelle Alex et je viens de Lagos.",
-            hints: ["Ich heiße …", "Ich komme aus …"],
+            hints: ['Ich heiße …', 'Ich komme aus …'],
         },
         {
-            question: "Was machst du gern in deiner Freizeit?",
+            question: 'Was machst du gern in deiner Freizeit?',
             prompt: "Parle d'une activité que tu aimes faire.",
-            example: "Ich lese gern und höre Musik.",
+            example: 'Ich lese gern und höre Musik.',
             translation: "J'aime lire et écouter de la musique.",
-            hints: ["Ich … gern", "In meiner Freizeit …"],
+            hints: ['Ich … gern', 'In meiner Freizeit …'],
         },
     ],
     A2: [
         {
-            question: "Was hast du gestern gemacht?",
-            prompt: "Raconte une chose que tu as faite hier.",
-            example: "Gestern habe ich mit Freunden gekocht.",
+            question: 'Was hast du gestern gemacht?',
+            prompt: 'Raconte une chose que tu as faite hier.',
+            example: 'Gestern habe ich mit Freunden gekocht.',
             translation: "Hier, j'ai cuisiné avec des amis.",
-            hints: ["Gestern habe ich …", "Danach bin ich …"],
+            hints: ['Gestern habe ich …', 'Danach bin ich …'],
         },
         {
-            question: "Wie sieht dein idealer Urlaub aus?",
-            prompt: "Décris tes vacances idéales en quelques phrases.",
-            example: "Ich möchte ans Meer fahren und viel schwimmen.",
-            translation: "Je voudrais aller à la mer et beaucoup nager.",
-            hints: ["Ich möchte …", "Am liebsten …"],
+            question: 'Wie sieht dein idealer Urlaub aus?',
+            prompt: 'Décris tes vacances idéales en quelques phrases.',
+            example: 'Ich möchte ans Meer fahren und viel schwimmen.',
+            translation: 'Je voudrais aller à la mer et beaucoup nager.',
+            hints: ['Ich möchte …', 'Am liebsten …'],
         },
     ],
     B1: [
         {
-            question: "Warum lernst du Deutsch?",
-            prompt: "Donne une raison et explique ton choix.",
+            question: 'Warum lernst du Deutsch?',
+            prompt: 'Donne une raison et explique ton choix.',
             example:
-                "Ich lerne gern Deutsch, weil ich neue Menschen kennenlernen möchte.",
+                'Ich lerne gern Deutsch, weil ich neue Menschen kennenlernen möchte.',
             translation:
                 "J'aime apprendre l'allemand parce que je voudrais rencontrer de nouvelles personnes.",
-            hints: ["Ich lerne Deutsch, weil …", "Außerdem …"],
+            hints: ['Ich lerne Deutsch, weil …', 'Außerdem …'],
         },
         {
-            question: "Was sind die Vorteile von öffentlichen Verkehrsmitteln?",
-            prompt: "Donne ton avis et justifie-le.",
+            question: 'Was sind die Vorteile von öffentlichen Verkehrsmitteln?',
+            prompt: 'Donne ton avis et justifie-le.',
             example:
-                "Öffentliche Verkehrsmittel sind praktisch, weil sie oft günstiger sind.",
+                'Öffentliche Verkehrsmittel sind praktisch, weil sie oft günstiger sind.',
             translation:
                 "Les transports publics sont pratiques parce qu'ils sont souvent moins chers.",
-            hints: ["Meiner Meinung nach …", "Ein Vorteil ist …"],
+            hints: ['Meiner Meinung nach …', 'Ein Vorteil ist …'],
         },
     ],
     B2: [
         {
-            question: "Was ist beim Deutschlernen besonders wichtig?",
-            prompt: "Exprime deux aspects de cette question.",
+            question: 'Was ist beim Deutschlernen besonders wichtig?',
+            prompt: 'Exprime deux aspects de cette question.',
             example:
-                "Einerseits ist regelmäßiges Üben wichtig, andererseits braucht man auch Geduld.",
+                'Einerseits ist regelmäßiges Üben wichtig, andererseits braucht man auch Geduld.',
             translation:
                 "D'un côté, pratiquer régulièrement est important ; de l'autre, il faut aussi de la patience.",
-            hints: ["Einerseits …", "Andererseits …"],
+            hints: ['Einerseits …', 'Andererseits …'],
         },
         {
-            question: "Sollte man im Homeoffice oder im Büro arbeiten?",
-            prompt: "Compare les deux possibilités et nuance ta conclusion.",
+            question: 'Sollte man im Homeoffice oder im Büro arbeiten?',
+            prompt: 'Compare les deux possibilités et nuance ta conclusion.',
             example:
-                "Obwohl das Homeoffice flexibel ist, bietet das Büro mehr direkten Austausch.",
+                'Obwohl das Homeoffice flexibel ist, bietet das Büro mehr direkten Austausch.',
             translation:
                 "Bien que le télétravail soit flexible, le bureau offre davantage d'échanges directs.",
-            hints: ["Obwohl …", "Allerdings …"],
+            hints: ['Obwohl …', 'Allerdings …'],
         },
     ],
 };
@@ -125,15 +125,15 @@ type SpeechWindow = Window & {
 };
 
 export default function OralPractice() {
-    const [level, setLevel] = useState<Level>("A1");
+    const [level, setLevel] = useState<Level>('A1');
     const [index, setIndex] = useState(0);
     const [isListening, setIsListening] = useState(false);
-    const [transcript, setTranscript] = useState("");
-    const [interimTranscript, setInterimTranscript] = useState("");
+    const [transcript, setTranscript] = useState('');
+    const [interimTranscript, setInterimTranscript] = useState('');
     const [hasAttempted, setHasAttempted] = useState(false);
     const [showHint, setShowHint] = useState(false);
     const [showExample, setShowExample] = useState(false);
-    const [error, setError] = useState("");
+    const [error, setError] = useState('');
     const [supported, setSupported] = useState<boolean | null>(null);
     const [speaking, setSpeaking] = useState(false);
     const recognitionRef = useRef<Recognition | null>(null);
@@ -164,12 +164,12 @@ export default function OralPractice() {
         window.speechSynthesis?.cancel();
         setSpeaking(false);
         setIsListening(false);
-        setTranscript("");
-        setInterimTranscript("");
+        setTranscript('');
+        setInterimTranscript('');
         setHasAttempted(false);
         setShowExample(false);
         setShowHint(false);
-        setError("");
+        setError('');
     };
 
     const chooseLevel = (next: Level) => {
@@ -197,24 +197,24 @@ export default function OralPractice() {
         window.speechSynthesis?.cancel();
         setSpeaking(false);
         recognitionRef.current?.abort();
-        setError("");
-        setTranscript("");
-        setInterimTranscript("");
+        setError('');
+        setTranscript('');
+        setInterimTranscript('');
         setHasAttempted(false);
         stoppedIntentionallyRef.current = false;
 
         const instance = new RecognitionAPI();
         recognitionRef.current = instance;
-        instance.lang = "de-DE";
+        instance.lang = 'de-DE';
         instance.continuous = false;
         instance.interimResults = true;
         instance.onresult = (event) => {
-            let finalText = "";
-            let interimText = "";
+            let finalText = '';
+            let interimText = '';
             for (let i = 0; i < event.results.length; i++) {
                 const result = event.results[i];
-                if (result.isFinal) finalText += result[0].transcript + " ";
-                else interimText += result[0].transcript + " ";
+                if (result.isFinal) finalText += result[0].transcript + ' ';
+                else interimText += result[0].transcript + ' ';
             }
             if (finalText.trim()) {
                 setTranscript(finalText.trim());
@@ -223,22 +223,22 @@ export default function OralPractice() {
             setInterimTranscript(interimText.trim());
         };
         instance.onerror = (event) => {
-            if (event.error === "aborted" && stoppedIntentionallyRef.current)
+            if (event.error === 'aborted' && stoppedIntentionallyRef.current)
                 return;
             const messages: Record<string, string> = {
-                "not-allowed":
-                    "Accès au microphone refusé. Autorise le micro dans ton navigateur.",
-                "service-not-allowed":
-                    "Le service de reconnaissance vocale est bloqué.",
-                "no-speech":
-                    "Aucune parole détectée. Réessaie en parlant plus près du micro.",
-                "audio-capture": "Aucun microphone disponible.",
+                'not-allowed':
+                    'Accès au microphone refusé. Autorise le micro dans ton navigateur.',
+                'service-not-allowed':
+                    'Le service de reconnaissance vocale est bloqué.',
+                'no-speech':
+                    'Aucune parole détectée. Réessaie en parlant plus près du micro.',
+                'audio-capture': 'Aucun microphone disponible.',
                 network:
-                    "La reconnaissance vocale nécessite une connexion ou un service disponible.",
+                    'La reconnaissance vocale nécessite une connexion ou un service disponible.',
             };
             setError(
                 messages[event.error] ||
-                    "Impossible de reconnaître la voix. Réessaie.",
+                    'Impossible de reconnaître la voix. Réessaie.',
             );
             setIsListening(false);
         };
@@ -246,7 +246,7 @@ export default function OralPractice() {
             if (recognitionRef.current === instance) {
                 setIsListening(false);
                 setHasAttempted(true);
-                setInterimTranscript("");
+                setInterimTranscript('');
             }
         };
         try {
@@ -260,8 +260,8 @@ export default function OralPractice() {
 
     const speak = (text: string) => {
         if (
-            !("speechSynthesis" in window) ||
-            !("SpeechSynthesisUtterance" in window)
+            !('speechSynthesis' in window) ||
+            !('SpeechSynthesisUtterance' in window)
         ) {
             setError(
                 "La lecture audio n'est pas disponible dans ce navigateur.",
@@ -273,7 +273,7 @@ export default function OralPractice() {
         setIsListening(false);
         window.speechSynthesis.cancel();
         const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = "de-DE";
+        utterance.lang = 'de-DE';
         utterance.rate = 0.85;
         utterance.onstart = () => setSpeaking(true);
         utterance.onend = () => setSpeaking(false);
@@ -294,7 +294,7 @@ export default function OralPractice() {
                         id="oral-heading"
                         className="mt-6 font-display text-5xl leading-[1.1] font-semibold tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
                     >
-                        Ose parler{" "}
+                        Ose parler{' '}
                         <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
                             à voix haute.
                         </span>
@@ -316,10 +316,10 @@ export default function OralPractice() {
                             Atelier de conversation
                             <span className="mx-1 text-border">/</span>
                             <span className="text-foreground">
-                                {String(index + 1).padStart(2, "0")} —{" "}
+                                {String(index + 1).padStart(2, '0')} —{' '}
                                 {String(challenges[level].length).padStart(
                                     2,
-                                    "0",
+                                    '0',
                                 )}
                             </span>
                         </div>
@@ -328,7 +328,7 @@ export default function OralPractice() {
                             aria-label="Choisir le niveau oral"
                             className="grid grid-cols-4 gap-1 sm:flex"
                         >
-                            {(["A1", "A2", "B1", "B2"] as Level[]).map(
+                            {(['A1', 'A2', 'B1', 'B2'] as Level[]).map(
                                 (item) => (
                                     <button
                                         key={item}
@@ -336,10 +336,10 @@ export default function OralPractice() {
                                         onClick={() => chooseLevel(item)}
                                         aria-pressed={level === item}
                                         className={cn(
-                                            "min-h-10 min-w-12 rounded-md px-4 py-2 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                                            'min-h-10 min-w-12 rounded-md px-4 py-2 text-sm font-semibold transition-colors focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none',
                                             level === item
-                                                ? "bg-foreground text-background"
-                                                : "text-muted-foreground hover:bg-muted hover:text-foreground",
+                                                ? 'bg-foreground text-background'
+                                                : 'text-muted-foreground hover:bg-muted hover:text-foreground',
                                         )}
                                     >
                                         {item}
@@ -350,7 +350,7 @@ export default function OralPractice() {
                     </div>
 
                     <div className="mx-auto max-w-4xl pt-10 sm:pt-14">
-                        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs font-semibold tracking-widest text-muted-foreground uppercase">
                             <span>Écoute</span>
                             <span aria-hidden="true">—</span>
                             <span>Réponds</span>
@@ -358,12 +358,12 @@ export default function OralPractice() {
                             <span>Progresse</span>
                         </div>
                         <div className="mt-8 text-center">
-                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                            <p className="text-xs font-semibold tracking-[0.18em] text-primary uppercase">
                                 Ton défi en allemand
                             </p>
                             <h3
                                 lang="de"
-                                className="mx-auto mt-4 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-tight text-foreground sm:text-5xl"
+                                className="mx-auto mt-4 max-w-3xl font-display text-3xl leading-tight font-semibold tracking-tight text-foreground sm:text-5xl"
                             >
                                 {challenge.question}
                             </h3>
@@ -376,10 +376,10 @@ export default function OralPractice() {
                                     variant="outline"
                                     onClick={() => speak(challenge.question)}
                                 >
-                                    <Volume2 className="size-4" />{" "}
+                                    <Volume2 className="size-4" />{' '}
                                     {speaking
-                                        ? "Lecture…"
-                                        : "Écouter la question"}
+                                        ? 'Lecture…'
+                                        : 'Écouter la question'}
                                 </Button>
                                 <Button
                                     type="button"
@@ -387,7 +387,7 @@ export default function OralPractice() {
                                     onClick={() => setShowHint((v) => !v)}
                                     aria-expanded={showHint}
                                 >
-                                    <Lightbulb className="size-4" />{" "}
+                                    <Lightbulb className="size-4" />{' '}
                                     {showHint
                                         ? "Masquer l'indice"
                                         : "Besoin d'un indice ?"}
@@ -399,11 +399,11 @@ export default function OralPractice() {
                                     aria-live="polite"
                                 >
                                     <span className="font-medium text-foreground">
-                                        Commence par :{" "}
+                                        Commence par :{' '}
                                     </span>
                                     {challenge.hints.map((hint, i) => (
                                         <span key={hint} lang="de">
-                                            {i > 0 ? " · " : ""}
+                                            {i > 0 ? ' · ' : ''}
                                             {hint}
                                         </span>
                                     ))}
@@ -431,13 +431,13 @@ export default function OralPractice() {
                                     aria-label={
                                         isListening
                                             ? "Terminer l'enregistrement"
-                                            : "Commencer à répondre au microphone"
+                                            : 'Commencer à répondre au microphone'
                                     }
                                     className={cn(
-                                        "relative flex size-28 items-center justify-center rounded-full border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-ring/30 disabled:cursor-not-allowed disabled:opacity-50 sm:size-32",
+                                        'relative flex size-28 items-center justify-center rounded-full border-2 transition-all duration-200 focus-visible:ring-4 focus-visible:ring-ring/30 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50 sm:size-32',
                                         isListening
-                                            ? "border-primary bg-primary text-primary-foreground"
-                                            : "border-foreground bg-foreground text-background hover:scale-105 active:scale-95",
+                                            ? 'border-primary bg-primary text-primary-foreground'
+                                            : 'border-foreground bg-foreground text-background hover:scale-105 active:scale-95',
                                     )}
                                 >
                                     {isListening ? (
@@ -460,13 +460,13 @@ export default function OralPractice() {
                                 {isListening
                                     ? "Je t'écoute…"
                                     : transcript
-                                      ? "Bien, ta réponse est enregistrée"
-                                      : "À toi de parler"}
+                                      ? 'Bien, ta réponse est enregistrée'
+                                      : 'À toi de parler'}
                             </p>
                             <p className="mt-2 max-w-sm text-sm text-muted-foreground">
                                 {isListening
-                                    ? "Parle en allemand, puis touche le micro pour terminer."
-                                    : "Touche le micro et réponds naturellement en allemand."}
+                                    ? 'Parle en allemand, puis touche le micro pour terminer.'
+                                    : 'Touche le micro et réponds naturellement en allemand.'}
                             </p>
                             {supported === false && (
                                 <p
@@ -495,7 +495,7 @@ export default function OralPractice() {
                                 className="mx-auto mt-11 max-w-2xl border-t border-border pt-6 text-center"
                                 aria-live="polite"
                             >
-                                <p className="text-xs font-semibold uppercase tracking-widest text-muted-foreground">
+                                <p className="text-xs font-semibold tracking-widest text-muted-foreground uppercase">
                                     Ce que le micro a compris
                                 </p>
                                 <p
@@ -504,7 +504,7 @@ export default function OralPractice() {
                                 >
                                     {transcript ||
                                         interimTranscript ||
-                                        "Aucune phrase reconnue. Réessaie."}
+                                        'Aucune phrase reconnue. Réessaie.'}
                                 </p>
                                 <p className="mt-3 text-xs text-muted-foreground">
                                     Transcription automatique, sans notation
@@ -535,10 +535,10 @@ export default function OralPractice() {
                                 }
                                 aria-expanded={showExample}
                             >
-                                <Headphones className="size-4" />{" "}
+                                <Headphones className="size-4" />{' '}
                                 {showExample
-                                    ? "Masquer la réponse modèle"
-                                    : "Voir une réponse possible"}
+                                    ? 'Masquer la réponse modèle'
+                                    : 'Voir une réponse possible'}
                             </Button>
                             <div className="flex items-center gap-2">
                                 <Button
@@ -559,7 +559,7 @@ export default function OralPractice() {
                                     }
                                     onClick={() => changeChallenge(index + 1)}
                                 >
-                                    Défi suivant{" "}
+                                    Défi suivant{' '}
                                     <ArrowRight className="size-4" />
                                 </Button>
                             </div>

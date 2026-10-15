@@ -1,6 +1,5 @@
-import { Head, Link } from "@inertiajs/react";
-import { useState } from "react";
-import type { ReactNode } from "react";
+import { Head, Link } from '@inertiajs/react';
+import { useState } from 'react';
 import {
     ArrowLeft,
     ArrowRight,
@@ -9,36 +8,34 @@ import {
     Compass,
     RotateCcw,
     Target,
-} from "lucide-react";
-
-import HomeLayout from "@/layouts/home/home-layout";
+} from 'lucide-react';
 
 const answers = [
-    { label: "Der", correct: true },
-    { label: "Die", correct: false },
-    { label: "Das", correct: false },
+    { label: 'Der', correct: true },
+    { label: 'Die', correct: false },
+    { label: 'Das', correct: false },
 ];
 
 const steps = [
     {
-        number: "01",
-        title: "Compréhension",
+        number: '01',
+        title: 'Compréhension',
         description:
-            "Identifier les mots, les expressions et les phrases que tu comprends.",
+            'Identifier les mots, les expressions et les phrases que tu comprends.',
         icon: BookOpen,
     },
     {
-        number: "02",
-        title: "Connaissances",
+        number: '02',
+        title: 'Connaissances',
         description:
-            "Observer ta maîtrise du vocabulaire et des structures grammaticales.",
+            'Observer ta maîtrise du vocabulaire et des structures grammaticales.',
         icon: Target,
     },
     {
-        number: "03",
-        title: "Orientation",
+        number: '03',
+        title: 'Orientation',
         description:
-            "Utiliser ces observations pour choisir un point de départ adapté.",
+            'Utiliser ces observations pour choisir un point de départ adapté.',
         icon: Compass,
     },
 ];
@@ -56,7 +53,7 @@ export default function PlacementTestPage() {
             <main className="min-h-screen bg-background text-foreground">
                 {/* HERO */}
 
-                <section className="px-5 pb-12 pt-8 sm:px-8 lg:pb-16">
+                <section className="px-5 pt-8 pb-12 sm:px-8 lg:pb-16">
                     <div className="mx-auto max-w-6xl">
                         <Link
                             href="/courses"
@@ -67,12 +64,12 @@ export default function PlacementTestPage() {
                         </Link>
 
                         <div className="mx-auto mt-12 max-w-5xl text-center">
-                            <p className="text-xs font-bold uppercase tracking-[0.28em] text-primary">
+                            <p className="text-xs font-bold tracking-[0.28em] text-primary uppercase">
                                 Le point de départ
                             </p>
 
-                            <h1 className="mt-6 font-display text-5xl font-semibold leading-[1.1] tracking-tight text-balance sm:text-6xl lg:text-7xl">
-                                Tu en es où{" "}
+                            <h1 className="mt-6 font-display text-5xl leading-[1.1] font-semibold tracking-tight text-balance sm:text-6xl lg:text-7xl">
+                                Tu en es où{' '}
                                 <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
                                     en allemand ?
                                 </span>
@@ -94,12 +91,12 @@ export default function PlacementTestPage() {
                         {/* EXPLANATION */}
 
                         <div>
-                            <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.2em] text-primary">
+                            <span className="inline-flex items-center gap-2 text-xs font-bold tracking-[0.2em] text-primary uppercase">
                                 <Compass className="size-4" />
                                 Découvre le principe
                             </span>
 
-                            <h2 className="mt-5 font-display text-3xl font-semibold leading-tight sm:text-4xl">
+                            <h2 className="mt-5 font-display text-3xl leading-tight font-semibold sm:text-4xl">
                                 Une question pour commencer.
                             </h2>
 
@@ -118,7 +115,7 @@ export default function PlacementTestPage() {
 
                         <div className="lg:border-l lg:border-border lg:pl-12">
                             <div className="flex items-center justify-between gap-4">
-                                <span className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+                                <span className="text-xs font-bold tracking-[0.2em] text-primary uppercase">
                                     Grammaire · Exemple A1
                                 </span>
 
@@ -133,21 +130,21 @@ export default function PlacementTestPage() {
 
                             <h3
                                 lang="de"
-                                className="mt-4 font-display text-3xl font-semibold leading-tight sm:text-4xl"
+                                className="mt-4 font-display text-3xl leading-tight font-semibold sm:text-4xl"
                             >
                                 <span
                                     className={
                                         selectedAnswer === null
-                                            ? "text-primary"
+                                            ? 'text-primary'
                                             : isCorrect
-                                              ? "text-primary"
-                                              : "text-destructive"
+                                              ? 'text-primary'
+                                              : 'text-destructive'
                                     }
                                 >
                                     {selectedAnswer === null
-                                        ? "___"
+                                        ? '___'
                                         : answers[selectedAnswer].label}
-                                </span>{" "}
+                                </span>{' '}
                                 Hund spielt im Garten.
                             </h3>
 
@@ -166,9 +163,9 @@ export default function PlacementTestPage() {
                                             className={`rounded-xl border-2 px-3 py-4 font-display text-xl font-semibold transition-colors ${
                                                 active
                                                     ? answer.correct
-                                                        ? "border-primary bg-primary text-primary-foreground"
-                                                        : "border-destructive bg-destructive/10 text-destructive"
-                                                    : "border-border text-foreground hover:border-primary"
+                                                        ? 'border-primary bg-primary text-primary-foreground'
+                                                        : 'border-destructive bg-destructive/10 text-destructive'
+                                                    : 'border-border text-foreground hover:border-primary'
                                             }`}
                                         >
                                             {answer.label}
@@ -191,16 +188,16 @@ export default function PlacementTestPage() {
                                         <CheckCircle2
                                             className={`mt-0.5 size-5 shrink-0 ${
                                                 isCorrect
-                                                    ? "text-primary"
-                                                    : "text-muted-foreground"
+                                                    ? 'text-primary'
+                                                    : 'text-muted-foreground'
                                             }`}
                                         />
 
                                         <div>
                                             <p className="font-semibold">
                                                 {isCorrect
-                                                    ? "Richtig ! Bonne réponse."
-                                                    : "Pas tout à fait."}
+                                                    ? 'Richtig ! Bonne réponse.'
+                                                    : 'Pas tout à fait.'}
                                             </p>
 
                                             <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
@@ -230,7 +227,7 @@ export default function PlacementTestPage() {
                 <section className="px-5 py-12 sm:px-8 lg:py-16">
                     <div className="mx-auto max-w-6xl">
                         <div className="text-center">
-                            <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
+                            <p className="text-xs font-bold tracking-[0.2em] text-primary uppercase">
                                 Le positionnement
                             </p>
 

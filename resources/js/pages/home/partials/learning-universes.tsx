@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import {
     ArrowRight,
     Check,
@@ -7,7 +7,7 @@ import {
     Play,
     RotateCcw,
     X,
-} from "lucide-react";
+} from 'lucide-react';
 
 type Lesson = {
     title: string;
@@ -23,81 +23,81 @@ type Lesson = {
 
 const lessons: Lesson[] = [
     {
-        title: "Grammaire",
-        subtitle: "Les articles définis",
-        before: "",
-        after: " Hund spielt im Garten.",
-        translation: "Le chien joue dans le jardin.",
-        options: ["Der", "Die", "Das"],
+        title: 'Grammaire',
+        subtitle: 'Les articles définis',
+        before: '',
+        after: ' Hund spielt im Garten.',
+        translation: 'Le chien joue dans le jardin.',
+        options: ['Der', 'Die', 'Das'],
         correct: 0,
         wrong: 1,
-        explanation: "Hund est masculin : on utilise Der.",
+        explanation: 'Hund est masculin : on utilise Der.',
     },
     {
-        title: "Vocabulaire",
-        subtitle: "Les mots du quotidien",
-        before: "Das ",
-        after: " ist groß.",
-        translation: "La maison est grande.",
-        options: ["Auto", "Haus", "Buch"],
+        title: 'Vocabulaire',
+        subtitle: 'Les mots du quotidien',
+        before: 'Das ',
+        after: ' ist groß.',
+        translation: 'La maison est grande.',
+        options: ['Auto', 'Haus', 'Buch'],
         correct: 1,
         wrong: 0,
-        explanation: "Haus signifie maison.",
+        explanation: 'Haus signifie maison.',
     },
     {
-        title: "Conjugaison",
-        subtitle: "Le verbe lernen",
-        before: "Ich ",
-        after: " Deutsch.",
+        title: 'Conjugaison',
+        subtitle: 'Le verbe lernen',
+        before: 'Ich ',
+        after: ' Deutsch.',
         translation: "J'apprends l'allemand.",
-        options: ["lernst", "lernt", "lerne"],
+        options: ['lernst', 'lernt', 'lerne'],
         correct: 2,
         wrong: 0,
-        explanation: "Avec ich, on conjugue lernen en lerne.",
+        explanation: 'Avec ich, on conjugue lernen en lerne.',
     },
     {
-        title: "Prononciation",
-        subtitle: "Les salutations",
-        before: "Guten ",
-        after: "!",
-        translation: "Bonjour ! (le matin)",
-        options: ["Abend", "Morgen", "Nacht"],
+        title: 'Prononciation',
+        subtitle: 'Les salutations',
+        before: 'Guten ',
+        after: '!',
+        translation: 'Bonjour ! (le matin)',
+        options: ['Abend', 'Morgen', 'Nacht'],
         correct: 1,
         wrong: 2,
-        explanation: "Guten Morgen est une salutation matinale.",
+        explanation: 'Guten Morgen est une salutation matinale.',
     },
     {
-        title: "Compréhension",
-        subtitle: "Les situations du quotidien",
-        before: "Wie ",
-        after: " es dir?",
-        translation: "Comment vas-tu ?",
-        options: ["ist", "bist", "geht"],
+        title: 'Compréhension',
+        subtitle: 'Les situations du quotidien',
+        before: 'Wie ',
+        after: ' es dir?',
+        translation: 'Comment vas-tu ?',
+        options: ['ist', 'bist', 'geht'],
         correct: 2,
         wrong: 0,
-        explanation: "On demande Wie geht es dir?",
+        explanation: 'On demande Wie geht es dir?',
     },
     {
-        title: "Exercices",
-        subtitle: "Mise en pratique",
-        before: "Wir ",
-        after: " aus Frankreich.",
-        translation: "Nous venons de France.",
-        options: ["kommt", "kommen", "komme"],
+        title: 'Exercices',
+        subtitle: 'Mise en pratique',
+        before: 'Wir ',
+        after: ' aus Frankreich.',
+        translation: 'Nous venons de France.',
+        options: ['kommt', 'kommen', 'komme'],
         correct: 1,
         wrong: 0,
-        explanation: "Avec wir, on utilise kommen.",
+        explanation: 'Avec wir, on utilise kommen.',
     },
 ];
 
 type Phase =
-    | "reading"
-    | "moveWrong"
-    | "pressWrong"
-    | "showWrong"
-    | "moveCorrect"
-    | "pressCorrect"
-    | "showCorrect";
+    | 'reading'
+    | 'moveWrong'
+    | 'pressWrong'
+    | 'showWrong'
+    | 'moveCorrect'
+    | 'pressCorrect'
+    | 'showCorrect';
 
 const timings: Record<Phase, number> = {
     reading: 1300,
@@ -111,7 +111,7 @@ const timings: Record<Phase, number> = {
 
 export default function LearningUniverses() {
     const [index, setIndex] = useState(0);
-    const [phase, setPhase] = useState<Phase>("reading");
+    const [phase, setPhase] = useState<Phase>('reading');
     const [playing, setPlaying] = useState(true);
     const [manualAnswer, setManualAnswer] = useState<number | null>(null);
     const [cursor, setCursor] = useState({ x: 70, y: 90 });
@@ -121,13 +121,13 @@ export default function LearningUniverses() {
 
     const lesson = lessons[index];
 
-    const wrongVisible = ["showWrong", "moveCorrect", "pressCorrect"].includes(
+    const wrongVisible = ['showWrong', 'moveCorrect', 'pressCorrect'].includes(
         phase,
     );
 
-    const correctVisible = phase === "showCorrect";
+    const correctVisible = phase === 'showCorrect';
 
-    const isClicking = phase === "pressWrong" || phase === "pressCorrect";
+    const isClicking = phase === 'pressWrong' || phase === 'pressCorrect';
 
     const activeAnswer = playing
         ? correctVisible
@@ -149,33 +149,33 @@ export default function LearningUniverses() {
 
         const timer = window.setTimeout(() => {
             switch (phase) {
-                case "reading":
-                    setPhase("moveWrong");
+                case 'reading':
+                    setPhase('moveWrong');
                     break;
 
-                case "moveWrong":
-                    setPhase("pressWrong");
+                case 'moveWrong':
+                    setPhase('pressWrong');
                     break;
 
-                case "pressWrong":
-                    setPhase("showWrong");
+                case 'pressWrong':
+                    setPhase('showWrong');
                     break;
 
-                case "showWrong":
-                    setPhase("moveCorrect");
+                case 'showWrong':
+                    setPhase('moveCorrect');
                     break;
 
-                case "moveCorrect":
-                    setPhase("pressCorrect");
+                case 'moveCorrect':
+                    setPhase('pressCorrect');
                     break;
 
-                case "pressCorrect":
-                    setPhase("showCorrect");
+                case 'pressCorrect':
+                    setPhase('showCorrect');
                     break;
 
-                case "showCorrect":
+                case 'showCorrect':
                     setIndex((i) => (i + 1) % lessons.length);
-                    setPhase("reading");
+                    setPhase('reading');
                     break;
             }
         }, timings[phase]);
@@ -194,17 +194,17 @@ export default function LearningUniverses() {
             let target: number | null = null;
 
             if (
-                phase === "moveWrong" ||
-                phase === "pressWrong" ||
-                phase === "showWrong"
+                phase === 'moveWrong' ||
+                phase === 'pressWrong' ||
+                phase === 'showWrong'
             ) {
                 target = lesson.wrong;
             }
 
             if (
-                phase === "moveCorrect" ||
-                phase === "pressCorrect" ||
-                phase === "showCorrect"
+                phase === 'moveCorrect' ||
+                phase === 'pressCorrect' ||
+                phase === 'showCorrect'
             ) {
                 target = lesson.correct;
             }
@@ -225,10 +225,10 @@ export default function LearningUniverses() {
 
         updateCursor();
 
-        window.addEventListener("resize", updateCursor);
+        window.addEventListener('resize', updateCursor);
 
         return () => {
-            window.removeEventListener("resize", updateCursor);
+            window.removeEventListener('resize', updateCursor);
         };
     }, [index, phase, lesson]);
 
@@ -238,26 +238,26 @@ export default function LearningUniverses() {
 
     function selectLesson(next: number) {
         setIndex(next);
-        setPhase("reading");
+        setPhase('reading');
         setManualAnswer(null);
     }
 
     function handleAnswer(option: number) {
         setPlaying(false);
         setManualAnswer(option);
-        setPhase(option === lesson.correct ? "showCorrect" : "showWrong");
+        setPhase(option === lesson.correct ? 'showCorrect' : 'showWrong');
     }
 
     function nextLesson() {
         setIndex((i) => (i + 1) % lessons.length);
-        setPhase("reading");
+        setPhase('reading');
         setManualAnswer(null);
     }
 
     function restart() {
         setPlaying(true);
         setIndex(0);
-        setPhase("reading");
+        setPhase('reading');
         setManualAnswer(null);
         setCursor({ x: 70, y: 90 });
     }
@@ -265,7 +265,7 @@ export default function LearningUniverses() {
     function togglePlayback() {
         if (!playing) {
             setManualAnswer(null);
-            setPhase("reading");
+            setPhase('reading');
         }
         setPlaying((value) => !value);
     }
@@ -274,7 +274,7 @@ export default function LearningUniverses() {
         <section
             id="univers"
             aria-labelledby="universes-heading"
-            className="relative overflow-hidden  px-4 py-24 sm:px-8 lg:py-36"
+            className="relative overflow-hidden px-4 py-24 sm:px-8 lg:py-36"
         >
             <div
                 aria-hidden="true"
@@ -289,7 +289,7 @@ export default function LearningUniverses() {
                         id="universes-heading"
                         className="mt-6 font-display text-5xl leading-[1.1] font-semibold tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
                     >
-                        Comprendre, c’est bien.{" "}
+                        Comprendre, c’est bien.{' '}
                         <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
                             Essayer, c’est mieux.
                         </span>
@@ -316,8 +316,8 @@ export default function LearningUniverses() {
                             aria-pressed={index === i}
                             className={`relative pb-2 text-sm font-semibold transition-colors sm:text-base ${
                                 index === i
-                                    ? "text-primary"
-                                    : "text-muted-foreground hover:text-foreground"
+                                    ? 'text-primary'
+                                    : 'text-muted-foreground hover:text-foreground'
                             }`}
                         >
                             {item.title}
@@ -332,7 +332,7 @@ export default function LearningUniverses() {
                 {/* COMPUTER */}
 
                 <div className="relative mx-auto mt-12 max-w-5xl">
-                    <div className="overflow-hidden rounded-[1.5rem] border-[5px] border-[#25302b] bg-card shadow-[0_32px_95px_-35px_rgba(0,0,0,0.4)] dark:border-[#385044] sm:border-[9px]">
+                    <div className="overflow-hidden rounded-[1.5rem] border-[5px] border-[#25302b] bg-card shadow-[0_32px_95px_-35px_rgba(0,0,0,0.4)] sm:border-[9px] dark:border-[#385044]">
                         {/* WINDOW BAR */}
 
                         <div className="flex items-center justify-between border-b border-border bg-muted/70 px-5 py-3">
@@ -359,9 +359,9 @@ export default function LearningUniverses() {
 
                             <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border/60 px-5 py-5 sm:px-10">
                                 <div>
-                                    <p className="text-xs font-semibold uppercase tracking-widest text-primary">
-                                        Module{" "}
-                                        {String(index + 1).padStart(2, "0")}
+                                    <p className="text-xs font-semibold tracking-widest text-primary uppercase">
+                                        Module{' '}
+                                        {String(index + 1).padStart(2, '0')}
                                     </p>
 
                                     <h3 className="mt-1 font-display text-2xl font-semibold">
@@ -372,12 +372,12 @@ export default function LearningUniverses() {
                                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                                     <span
                                         className={`size-2 rounded-full bg-primary ${
-                                            playing ? "animate-pulse" : ""
+                                            playing ? 'animate-pulse' : ''
                                         }`}
                                     />
                                     {playing
-                                        ? "Démo automatique"
-                                        : "À toi de jouer"}
+                                        ? 'Démo automatique'
+                                        : 'À toi de jouer'}
                                 </div>
                             </div>
 
@@ -385,7 +385,7 @@ export default function LearningUniverses() {
 
                             <div
                                 key={index}
-                                className="mx-auto max-w-2xl px-5 pb-24 pt-9 sm:px-10 sm:pt-12"
+                                className="mx-auto max-w-2xl px-5 pt-9 pb-24 sm:px-10 sm:pt-12"
                             >
                                 <p className="text-sm font-semibold text-primary">
                                     {lesson.subtitle}
@@ -393,20 +393,20 @@ export default function LearningUniverses() {
 
                                 {/* LIVE ANSWER INSERTION */}
 
-                                <h4 className="mt-6 font-display text-3xl font-semibold leading-[1.35] text-foreground sm:text-5xl">
+                                <h4 className="mt-6 font-display text-3xl leading-[1.35] font-semibold text-foreground sm:text-5xl">
                                     {lesson.before}
 
                                     <span
                                         className={`inline-flex min-w-[2.8ch] items-center justify-center rounded-lg px-2 py-0.5 align-baseline transition-[background-color,color] duration-300 ${
                                             activeAnswer === null
-                                                ? "border-b-2 border-dashed border-primary/50 bg-primary/5 text-primary"
+                                                ? 'border-b-2 border-dashed border-primary/50 bg-primary/5 text-primary'
                                                 : answerIsCorrect
-                                                  ? "bg-primary/12 text-primary"
-                                                  : "bg-destructive/12 text-destructive"
+                                                  ? 'bg-primary/12 text-primary'
+                                                  : 'bg-destructive/12 text-destructive'
                                         }`}
                                     >
                                         {activeAnswer === null
-                                            ? "___"
+                                            ? '___'
                                             : lesson.options[activeAnswer]}
                                     </span>
 
@@ -435,7 +435,7 @@ export default function LearningUniverses() {
                                                 playing &&
                                                 isClicking &&
                                                 optionIndex ===
-                                                    (phase === "pressWrong"
+                                                    (phase === 'pressWrong'
                                                         ? lesson.wrong
                                                         : lesson.correct);
 
@@ -456,20 +456,20 @@ export default function LearningUniverses() {
                                                     aria-pressed={selected}
                                                     className={`relative min-h-17 overflow-visible rounded-xl border-2 px-4 py-4 text-center font-display text-lg font-medium transition-[background-color,border-color,color,transform] duration-300 ${
                                                         correct
-                                                            ? "scale-[1.03] border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/15"
+                                                            ? 'scale-[1.03] border-primary bg-primary text-primary-foreground shadow-lg shadow-primary/15'
                                                             : wrong
-                                                              ? "border-destructive bg-destructive/10 text-destructive"
-                                                              : "border-border bg-background text-foreground hover:border-primary/60 hover:bg-accent"
+                                                              ? 'border-destructive bg-destructive/10 text-destructive'
+                                                              : 'border-border bg-background text-foreground hover:border-primary/60 hover:bg-accent'
                                                     }`}
                                                 >
                                                     {option}
 
                                                     {correct && (
-                                                        <Check className="absolute right-2 top-2 size-4" />
+                                                        <Check className="absolute top-2 right-2 size-4" />
                                                     )}
 
                                                     {wrong && (
-                                                        <X className="absolute right-2 top-2 size-4" />
+                                                        <X className="absolute top-2 right-2 size-4" />
                                                     )}
 
                                                     {/* CLICK SHOCKWAVE */}
@@ -478,7 +478,7 @@ export default function LearningUniverses() {
                                                         <span
                                                             key={phase}
                                                             aria-hidden="true"
-                                                            className="pointer-events-none absolute left-1/2 top-1/2 z-20 size-8 -translate-x-1/2 -translate-y-1/2 rounded-full border-2 border-primary/70 animate-[click-ripple_400ms_ease-out_forwards]"
+                                                            className="pointer-events-none absolute top-1/2 left-1/2 z-20 size-8 -translate-x-1/2 -translate-y-1/2 animate-[click-ripple_400ms_ease-out_forwards] rounded-full border-2 border-primary/70"
                                                         />
                                                     )}
                                                 </button>
@@ -497,9 +497,9 @@ export default function LearningUniverses() {
                                         !correctVisible &&
                                         activeAnswer === null && (
                                             <p className="text-sm text-muted-foreground">
-                                                {phase === "reading"
-                                                    ? "Lis la phrase et trouve le mot manquant…"
-                                                    : "Choix de la réponse en cours…"}
+                                                {phase === 'reading'
+                                                    ? 'Lis la phrase et trouve le mot manquant…'
+                                                    : 'Choix de la réponse en cours…'}
                                             </p>
                                         )}
 
@@ -547,7 +547,7 @@ export default function LearningUniverses() {
                             {playing && (
                                 <div
                                     aria-hidden="true"
-                                    className="pointer-events-none absolute left-0 top-0 z-30 hidden will-change-transform transition-transform duration-[850ms] ease-in-out sm:block motion-reduce:transition-none"
+                                    className="pointer-events-none absolute top-0 left-0 z-30 hidden transition-transform duration-[850ms] ease-in-out will-change-transform motion-reduce:transition-none sm:block"
                                     style={{
                                         transform: `translate3d(${cursor.x}px, ${cursor.y}px, 0)`,
                                     }}
@@ -555,8 +555,8 @@ export default function LearningUniverses() {
                                     <MousePointer2
                                         className={`size-7 -translate-x-1 -translate-y-1 fill-foreground text-background drop-shadow-md transition-transform duration-150 ${
                                             isClicking
-                                                ? "scale-75"
-                                                : "scale-100"
+                                                ? 'scale-75'
+                                                : 'scale-100'
                                         }`}
                                     />
 
@@ -571,7 +571,7 @@ export default function LearningUniverses() {
                             <div className="absolute inset-x-0 bottom-0 border-t border-border/60 bg-muted/40 px-5 py-4 sm:px-10">
                                 <div className="flex items-center justify-between text-xs text-muted-foreground">
                                     <span>
-                                        Exercice {index + 1} sur{" "}
+                                        Exercice {index + 1} sur{' '}
                                         {lessons.length}
                                     </span>
                                     <span>
@@ -599,12 +599,12 @@ export default function LearningUniverses() {
 
                     <div
                         aria-hidden="true"
-                        className="mx-auto h-12 w-16 bg-gradient-to-b from-[#69746e] to-[#c2cac4] dark:from-[#24372d] dark:to-[#53675b] sm:h-16 sm:w-24"
+                        className="mx-auto h-12 w-16 bg-gradient-to-b from-[#69746e] to-[#c2cac4] sm:h-16 sm:w-24 dark:from-[#24372d] dark:to-[#53675b]"
                     />
 
                     <div
                         aria-hidden="true"
-                        className="mx-auto h-3 w-40 rounded-t-xl bg-gradient-to-b from-[#aab8af] to-[#718278] shadow-lg dark:from-[#54675b] dark:to-[#2c4034] sm:w-56"
+                        className="mx-auto h-3 w-40 rounded-t-xl bg-gradient-to-b from-[#aab8af] to-[#718278] shadow-lg sm:w-56 dark:from-[#54675b] dark:to-[#2c4034]"
                     />
                 </div>
 
@@ -622,7 +622,7 @@ export default function LearningUniverses() {
                             <Play className="size-4" />
                         )}
 
-                        {playing ? "Pause" : "Lecture auto"}
+                        {playing ? 'Pause' : 'Lecture auto'}
                     </button>
 
                     <button

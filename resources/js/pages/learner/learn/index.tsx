@@ -1,23 +1,23 @@
-import { Head, Link, router } from "@inertiajs/react";
+import { Head, Link, router } from '@inertiajs/react';
 import {
     ArrowRight,
     CheckCircle2,
     LockKeyhole,
     PlayCircle,
-} from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+} from 'lucide-react';
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
-} from "@/components/ui/select";
-import { show as lessonShow } from "@/routes/learner/learn/lesson";
-import { update as updateLevel } from "@/routes/learner/learn/level";
-import { cn } from "@/lib/utils";
-import type { LearnLevel, LevelCode } from "@/types/learn";
+} from '@/components/ui/select';
+import { show as lessonShow } from '@/routes/learner/learn/lesson';
+import { update as updateLevel } from '@/routes/learner/learn/level';
+import { cn } from '@/lib/utils';
+import type { LearnLevel, LevelCode } from '@/types/learn';
 
 type Props = {
     levels: LearnLevel[];
@@ -94,7 +94,7 @@ export default function LearnIndex({
                 <section className="mt-12" aria-labelledby="program-heading">
                     <div className="mb-6 flex items-end justify-between gap-3">
                         <div>
-                            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+                            <p className="text-xs font-semibold tracking-[0.18em] text-primary uppercase">
                                 Parcours · {previewLevel}
                             </p>
                             <h2
@@ -105,8 +105,8 @@ export default function LearnIndex({
                             </h2>
                         </div>
                         <p className="shrink-0 text-sm text-muted-foreground">
-                            {String(modules.length).padStart(2, "0")}{" "}
-                            {modules.length > 1 ? "modules" : "module"}
+                            {String(modules.length).padStart(2, '0')}{' '}
+                            {modules.length > 1 ? 'modules' : 'module'}
                         </p>
                     </div>
 
@@ -125,35 +125,21 @@ export default function LearnIndex({
                             >
                                 <SelectTrigger
                                     aria-label="Choisir un module"
-                                    className="
-        !h-auto w-full min-w-0
-        rounded-xl
-        border-primary/30
-        bg-primary/10
-        px-4 py-4
-        text-left
-        shadow-sm
-        transition-colors
-        hover:border-primary/50
-        hover:bg-primary/15
-        focus-visible:ring-primary/30
-        sm:px-6 sm:py-5
-        [&>svg]:text-primary
-    "
+                                    className="!h-auto w-full min-w-0 rounded-xl border-primary/30 bg-primary/10 px-4 py-4 text-left shadow-sm transition-colors hover:border-primary/50 hover:bg-primary/15 focus-visible:ring-primary/30 sm:px-6 sm:py-5 [&>svg]:text-primary"
                                 >
                                     <div className="flex min-w-0 flex-1 items-center gap-4 sm:gap-6">
                                         <span className="shrink-0 font-display text-3xl font-semibold tracking-tight text-primary sm:text-4xl">
                                             {String(
                                                 activeModuleIndex + 1,
-                                            ).padStart(2, "0")}
+                                            ).padStart(2, '0')}
                                         </span>
 
                                         <div className="min-w-0 flex-1">
-                                            <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-primary">
-                                                Module{" "}
+                                            <p className="text-[10px] font-semibold tracking-[0.18em] text-primary uppercase">
+                                                Module{' '}
                                                 {String(
                                                     activeModuleIndex + 1,
-                                                ).padStart(2, "0")}
+                                                ).padStart(2, '0')}
                                             </p>
 
                                             <div className="mt-1 truncate font-display text-base font-semibold text-foreground sm:text-xl">
@@ -164,10 +150,10 @@ export default function LearnIndex({
                                             </div>
 
                                             <p className="mt-1 text-xs text-muted-foreground">
-                                                {activeModule.lessons.length}{" "}
+                                                {activeModule.lessons.length}{' '}
                                                 {activeModule.lessons.length > 1
-                                                    ? "leçons"
-                                                    : "leçon"}
+                                                    ? 'leçons'
+                                                    : 'leçon'}
                                             </p>
                                         </div>
                                     </div>
@@ -185,9 +171,9 @@ export default function LearnIndex({
                                             <span className="font-mono text-xs text-muted-foreground">
                                                 {String(index + 1).padStart(
                                                     2,
-                                                    "0",
+                                                    '0',
                                                 )}
-                                            </span>{" "}
+                                            </span>{' '}
                                             <span className="ml-2 font-medium">
                                                 {module.title}
                                             </span>
@@ -211,8 +197,7 @@ export default function LearnIndex({
                                                 const isReady =
                                                     lesson.available;
                                                 const isCompleted =
-                                                    lesson.read &&
-                                                    isReady;
+                                                    lesson.read && isReady;
                                                 const lessonNumber = `${activeModuleIndex + 1}.${lessonIndex + 1}`;
                                                 const isLast =
                                                     lessonIndex ===
@@ -225,25 +210,25 @@ export default function LearnIndex({
                                                         key={lesson.id}
                                                         aria-disabled={!isReady}
                                                         className={cn(
-                                                            "group relative flex min-w-0 items-center gap-4 px-4 py-4 transition-colors sm:gap-5 sm:px-6 sm:py-5",
+                                                            'group relative flex min-w-0 items-center gap-4 px-4 py-4 transition-colors sm:gap-5 sm:px-6 sm:py-5',
                                                             !isLast &&
-                                                                "border-b border-border/70",
+                                                                'border-b border-border/70',
                                                             isReady
-                                                                ? "hover:bg-muted/40"
-                                                                : "cursor-not-allowed select-none bg-muted/30 opacity-55 grayscale",
+                                                                ? 'hover:bg-muted/40'
+                                                                : 'cursor-not-allowed bg-muted/30 opacity-55 grayscale select-none',
                                                         )}
                                                     >
                                                         {/* Pastille d'état */}
                                                         <span
                                                             className={cn(
-                                                                "flex size-10 shrink-0 items-center justify-center rounded-full border",
+                                                                'flex size-10 shrink-0 items-center justify-center rounded-full border',
                                                                 isCompleted &&
-                                                                    "border-primary/30 bg-primary/10 text-primary",
+                                                                    'border-primary/30 bg-primary/10 text-primary',
                                                                 isReady &&
                                                                     !isCompleted &&
-                                                                    "border-primary bg-primary text-primary-foreground",
+                                                                    'border-primary bg-primary text-primary-foreground',
                                                                 !isReady &&
-                                                                    "border-border bg-background text-muted-foreground",
+                                                                    'border-border bg-background text-muted-foreground',
                                                             )}
                                                             aria-hidden="true"
                                                         >
@@ -261,18 +246,18 @@ export default function LearnIndex({
                                                             <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
                                                                 <h3
                                                                     className={cn(
-                                                                        "text-sm font-semibold leading-snug sm:text-base",
+                                                                        'text-sm leading-snug font-semibold sm:text-base',
                                                                         isReady
-                                                                            ? "text-foreground group-hover:text-primary"
-                                                                            : "text-muted-foreground",
+                                                                            ? 'text-foreground group-hover:text-primary'
+                                                                            : 'text-muted-foreground',
                                                                     )}
                                                                 >
                                                                     {
                                                                         lesson.title
                                                                     }
                                                                 </h3>
-                                                                <span className="text-xs tabular-nums text-muted-foreground">
-                                                                    Leçon{" "}
+                                                                <span className="text-xs text-muted-foreground tabular-nums">
+                                                                    Leçon{' '}
                                                                     {
                                                                         lessonNumber
                                                                     }
@@ -315,7 +300,7 @@ export default function LearnIndex({
                                                                         <span className="text-xs font-medium text-foreground">
                                                                             Meilleur
                                                                             score
-                                                                            :{" "}
+                                                                            :{' '}
                                                                             {
                                                                                 lesson.bestScore
                                                                             }
@@ -334,8 +319,8 @@ export default function LearnIndex({
                                                                 asChild
                                                                 variant={
                                                                     isCompleted
-                                                                        ? "outline"
-                                                                        : "default"
+                                                                        ? 'outline'
+                                                                        : 'default'
                                                                 }
                                                                 size="sm"
                                                                 className="shrink-0"
@@ -343,23 +328,21 @@ export default function LearnIndex({
                                                                 <Link
                                                                     href={lessonShow(
                                                                         {
-                                                                            module:
-                                                                                activeModule.id,
-                                                                            lesson:
-                                                                                lesson.id,
+                                                                            module: activeModule.id,
+                                                                            lesson: lesson.id,
                                                                         },
                                                                     )}
                                                                 >
                                                                     <span className="hidden sm:inline">
                                                                         {isCompleted
-                                                                            ? "Revoir"
-                                                                            : "Commencer"}
+                                                                            ? 'Revoir'
+                                                                            : 'Commencer'}
                                                                     </span>
                                                                     <span className="sr-only sm:hidden">
                                                                         {isCompleted
-                                                                            ? "Revoir"
-                                                                            : "Commencer"}{" "}
-                                                                        la leçon{" "}
+                                                                            ? 'Revoir'
+                                                                            : 'Commencer'}{' '}
+                                                                        la leçon{' '}
                                                                         {
                                                                             lesson.title
                                                                         }

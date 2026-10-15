@@ -9,6 +9,7 @@
 L'identité typographique de **CharlesAcademy** doit être chaleureuse, lisible, actuelle et crédible. Le style ne doit être ni infantilisant ni institutionnel. **Aucune mascotte n'est prévue.** La typographie est donc un élément central de la personnalité de marque.
 
 Principes :
+
 - Lecture d'abord : priorité à la compréhension des cours, exercices et messages d'interface.
 - Contraste typographique net entre titres et texte courant, sans multiplication des polices.
 - Hiérarchie cohérente sur landing page, application et espace pédagogique.
@@ -17,11 +18,11 @@ Principes :
 
 ## 2. Familles retenues
 
-| Rôle | Police | Graisses admises | Usage |
-|---|---|---|---|
-| Display / titres | **Fredoka** | 500, 600, 700 | H1–H4, accroches, nombres expressifs, titres de modules |
-| Lecture / interface | **DM Sans** | 400, 500, 600, 700 | Body, navigation, formulaires, boutons, tableaux, quiz, aides |
-| Technique | `ui-monospace, SFMono-Regular, Consolas, monospace` | 400–600 | Code, identifiants, contenus techniques uniquement |
+| Rôle                | Police                                              | Graisses admises   | Usage                                                         |
+| ------------------- | --------------------------------------------------- | ------------------ | ------------------------------------------------------------- |
+| Display / titres    | **Fredoka**                                         | 500, 600, 700      | H1–H4, accroches, nombres expressifs, titres de modules       |
+| Lecture / interface | **DM Sans**                                         | 400, 500, 600, 700 | Body, navigation, formulaires, boutons, tableaux, quiz, aides |
+| Technique           | `ui-monospace, SFMono-Regular, Consolas, monospace` | 400–600            | Code, identifiants, contenus techniques uniquement            |
 
 **Interdictions :** ne pas réintroduire Instrument Sans dans `--font-sans` ; ne pas utiliser Fredoka pour de longs paragraphes ou les contenus de lecture dense ; ne pas appliquer artificiellement des graisses inexistantes.
 
@@ -63,8 +64,17 @@ Pour les performances, privilégier une stratégie cohérente de chargement, `fo
 }
 
 @layer base {
-    body { @apply font-sans; }
-    h1, h2, h3, h4, h5, h6 { @apply font-display; }
+    body {
+        @apply font-sans;
+    }
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        @apply font-display;
+    }
 }
 ```
 
@@ -76,19 +86,19 @@ Les polices ne changent **pas** avec le thème : seules les couleurs typographiq
 
 Les tailles ci-dessous sont des valeurs de référence ; privilégier `clamp()` ou les utilitaires responsive de Tailwind selon le contexte.
 
-| Token | Famille / graisse | Mobile | Desktop | Interligne | Usage |
-|---|---|---:|---:|---:|---|
-| `display-xl` | Fredoka 600 | 44 px | 80 px | 1.02–1.08 | Hero principal |
-| `display-lg` | Fredoka 600 | 36 px | 64 px | 1.06–1.12 | Grande accroche |
-| `heading-1` | Fredoka 600 | 32 px | 52 px | 1.10–1.16 | Titres de section majeurs |
-| `heading-2` | Fredoka 600 | 28 px | 40 px | 1.14–1.20 | Sections |
-| `heading-3` | Fredoka 500/600 | 23 px | 30 px | 1.20–1.28 | Blocs importants |
-| `heading-4` | Fredoka 500/600 | 20 px | 24 px | 1.25–1.32 | Cartes et modules |
-| `body-lg` | DM Sans 400 | 17 px | 19 px | 1.55–1.70 | Introduction |
-| `body-md` | DM Sans 400 | 16 px | 16 px | 1.55–1.70 | Texte normal |
-| `body-sm` | DM Sans 400/500 | 14 px | 14 px | 1.45–1.60 | Descriptions courtes |
-| `label` | DM Sans 600 | 14 px | 14 px | 1.25–1.4 | Libellés, champs |
-| `caption` | DM Sans 500 | 12 px | 12 px | 1.4–1.5 | Métadonnées secondaires |
+| Token        | Famille / graisse | Mobile | Desktop | Interligne | Usage                     |
+| ------------ | ----------------- | -----: | ------: | ---------: | ------------------------- |
+| `display-xl` | Fredoka 600       |  44 px |   80 px |  1.02–1.08 | Hero principal            |
+| `display-lg` | Fredoka 600       |  36 px |   64 px |  1.06–1.12 | Grande accroche           |
+| `heading-1`  | Fredoka 600       |  32 px |   52 px |  1.10–1.16 | Titres de section majeurs |
+| `heading-2`  | Fredoka 600       |  28 px |   40 px |  1.14–1.20 | Sections                  |
+| `heading-3`  | Fredoka 500/600   |  23 px |   30 px |  1.20–1.28 | Blocs importants          |
+| `heading-4`  | Fredoka 500/600   |  20 px |   24 px |  1.25–1.32 | Cartes et modules         |
+| `body-lg`    | DM Sans 400       |  17 px |   19 px |  1.55–1.70 | Introduction              |
+| `body-md`    | DM Sans 400       |  16 px |   16 px |  1.55–1.70 | Texte normal              |
+| `body-sm`    | DM Sans 400/500   |  14 px |   14 px |  1.45–1.60 | Descriptions courtes      |
+| `label`      | DM Sans 600       |  14 px |   14 px |   1.25–1.4 | Libellés, champs          |
+| `caption`    | DM Sans 500       |  12 px |   12 px |    1.4–1.5 | Métadonnées secondaires   |
 
 **Accessibilité :** ne pas utiliser `caption` comme seule source d'une information essentielle ; 16 px reste la taille de référence pour les champs et textes de lecture sur mobile.
 
@@ -124,6 +134,7 @@ Les tailles ci-dessous sont des valeurs de référence ; privilégier `clamp()` 
 ## 5. Hiérarchie par surface
 
 ### Landing page
+
 - Un seul `h1` principal par page, avec Fredoka 600.
 - Titres de sections en `h2`, puis `h3` pour les sous-parties : respecter la structure sémantique.
 - Maximum recommandé : 10–14 mots pour un titre héro, si cela reste naturel.
@@ -131,11 +142,13 @@ Les tailles ci-dessous sont des valeurs de référence ; privilégier `clamp()` 
 - CTA : DM Sans 600, 14–16 px ; libellés orientés action.
 
 ### Application et tableau de bord
+
 - Fredoka sur les intitulés de pages et modules, sans en abuser.
 - DM Sans pour navigation, champs, tableaux, exercices, menus, alertes et feedbacks.
 - Dans les tableaux, favoriser la stabilité visuelle des chiffres avec `font-variant-numeric: tabular-nums` / `tabular-nums`.
 
 ### Contenu pédagogique français / allemand
+
 - Texte de cours : DM Sans 16–18 px, interligne 1.6 ou davantage si nécessaire.
 - Exemples allemands : DM Sans 500, visuellement différenciés par le contexte, pas seulement la couleur.
 - Conserver les signes `ä`, `ö`, `ü`, `Ä`, `Ö`, `Ü`, `ß` et `ẞ` correctement ; ne pas les remplacer.
@@ -143,26 +156,28 @@ Les tailles ci-dessous sont des valeurs de référence ; privilégier `clamp()` 
 
 ## 6. Graisses, espacements, casse
 
-| Élément | Poids | Tracking | Casse |
-|---|---:|---|---|
-| Hero | Fredoka 600 | -0.035em à -0.02em | Phrase normale |
-| Sections | Fredoka 600 | -0.025em | Phrase normale |
-| Cartes | Fredoka 500/600 | -0.015em | Phrase normale |
-| Paragraphes | DM Sans 400 | normal | Phrase normale |
-| Boutons | DM Sans 600 | 0 à 0.01em | Phrase normale |
-| Navigation | DM Sans 500/600 | normal | Phrase normale |
-| Eyebrow | DM Sans 700 | 0.06em | Majuscules ponctuelles uniquement |
+| Élément     |           Poids | Tracking           | Casse                             |
+| ----------- | --------------: | ------------------ | --------------------------------- |
+| Hero        |     Fredoka 600 | -0.035em à -0.02em | Phrase normale                    |
+| Sections    |     Fredoka 600 | -0.025em           | Phrase normale                    |
+| Cartes      | Fredoka 500/600 | -0.015em           | Phrase normale                    |
+| Paragraphes |     DM Sans 400 | normal             | Phrase normale                    |
+| Boutons     |     DM Sans 600 | 0 à 0.01em         | Phrase normale                    |
+| Navigation  | DM Sans 500/600 | normal             | Phrase normale                    |
+| Eyebrow     |     DM Sans 700 | 0.06em             | Majuscules ponctuelles uniquement |
 
 Éviter le texte centré sur de longs paragraphes. Ne jamais justifier les textes courants.
 
 ## 7. Couleurs et contrastes
 
 **Light mode :**
+
 - Titres et texte : `text-foreground` (base `#1F2937`).
 - Secondaire : `text-muted-foreground` (base `#52635C`).
 - Accent : `text-primary` (base `#038259`) sur fond clair.
 
 **Dark mode :**
+
 - Titres et texte : `text-foreground` (base `#EDF7F1`).
 - Secondaire : `text-muted-foreground` (base `#B3C8BB`).
 - Accent : `text-primary` (base `#22C58B`) sur fond sombre.
@@ -193,7 +208,8 @@ export function LandingHeading() {
                 L’allemand, enfin à ta portée.
             </h1>
             <p className="type-body-lg max-w-2xl text-muted-foreground">
-                Avance à ton rythme avec des cours clairs et des exercices interactifs.
+                Avance à ton rythme avec des cours clairs et des exercices
+                interactifs.
             </p>
         </header>
     );

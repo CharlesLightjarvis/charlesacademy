@@ -1,5 +1,5 @@
-import { router, usePage } from "@inertiajs/react";
-import { motion, useReducedMotion } from "framer-motion";
+import { router, usePage } from '@inertiajs/react';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
     ArrowRight,
     BookOpen,
@@ -7,16 +7,18 @@ import {
     GraduationCap,
     MessageCircle,
     Sparkles,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { dashboard, login, register } from "@/routes";
-import type { Auth } from "@/types";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { dashboard, login, register } from '@/routes';
+import type { Auth } from '@/types';
 
 export default function Hero() {
     const { auth } = usePage<{ auth: Auth }>().props;
     const shouldReduceMotion = useReducedMotion();
-    const floatingAnimation = shouldReduceMotion ? { y: 0 } : { y: [0, -12, 0] };
+    const floatingAnimation = shouldReduceMotion
+        ? { y: 0 }
+        : { y: [0, -12, 0] };
 
     return (
         <section className="relative isolate overflow-hidden px-5 pt-10 pb-12 text-foreground sm:px-8 lg:pt-12 lg:pb-12 2xl:pb-8">
@@ -40,10 +42,19 @@ export default function Hero() {
                         <Button
                             type="button"
                             size="lg"
-                            onClick={() => router.visit(auth.user ? dashboard().url : register().url)}
+                            onClick={() =>
+                                router.visit(
+                                    auth.user
+                                        ? dashboard().url
+                                        : register().url,
+                                )
+                            }
                         >
-                            {auth.user ? "Mon espace" : "Créer un compte"}
-                            <ArrowRight data-icon="inline-end" aria-hidden="true" />
+                            {auth.user ? 'Mon espace' : 'Créer un compte'}
+                            <ArrowRight
+                                data-icon="inline-end"
+                                aria-hidden="true"
+                            />
                         </Button>
                         {!auth.user && (
                             <Button
@@ -53,7 +64,10 @@ export default function Hero() {
                                 onClick={() => router.visit(login().url)}
                             >
                                 Se connecter
-                                <ArrowRight data-icon="inline-end" aria-hidden="true" />
+                                <ArrowRight
+                                    data-icon="inline-end"
+                                    aria-hidden="true"
+                                />
                             </Button>
                         )}
                     </div>
@@ -63,11 +77,18 @@ export default function Hero() {
                     <motion.div
                         initial={{ y: 0 }}
                         animate={floatingAnimation}
-                        transition={{ duration: 5.5, ease: "easeInOut", repeat: Infinity }}
+                        transition={{
+                            duration: 5.5,
+                            ease: 'easeInOut',
+                            repeat: Infinity,
+                        }}
                     >
                         <Card variant="floating" className="h-full gap-0 p-5">
                             <p className="flex items-center gap-2 text-xs font-bold tracking-wider text-primary uppercase">
-                                <Sparkles className="size-4" aria-hidden="true" />{" "}
+                                <Sparkles
+                                    className="size-4"
+                                    aria-hidden="true"
+                                />{' '}
                                 Un mot à découvrir
                             </p>
                             <p className="mt-3 font-display text-2xl font-semibold">
@@ -81,11 +102,19 @@ export default function Hero() {
                     <motion.div
                         initial={{ y: 0 }}
                         animate={floatingAnimation}
-                        transition={{ duration: 6.5, delay: -2, ease: "easeInOut", repeat: Infinity }}
+                        transition={{
+                            duration: 6.5,
+                            delay: -2,
+                            ease: 'easeInOut',
+                            repeat: Infinity,
+                        }}
                     >
                         <Card variant="floating" className="h-full gap-0 p-5">
                             <p className="flex items-center gap-2 text-xs font-bold tracking-wider text-primary uppercase">
-                                <BookOpen className="size-4" aria-hidden="true" />{" "}
+                                <BookOpen
+                                    className="size-4"
+                                    aria-hidden="true"
+                                />{' '}
                                 En pratique
                             </p>
                             <p className="mt-3 font-display text-2xl font-semibold">
@@ -101,13 +130,17 @@ export default function Hero() {
                 <motion.div
                     initial={{ y: 0 }}
                     animate={floatingAnimation}
-                    transition={{ duration: 5.5, ease: "easeInOut", repeat: Infinity }}
+                    transition={{
+                        duration: 5.5,
+                        ease: 'easeInOut',
+                        repeat: Infinity,
+                    }}
                     style={{ rotate: -3 }}
                     className="pointer-events-none absolute top-4 -left-7 hidden w-64 text-left 2xl:block"
                 >
                     <Card variant="floating" className="gap-0 p-5">
                         <p className="flex items-center gap-2 text-xs font-bold tracking-wider text-primary uppercase">
-                            <Sparkles className="size-4" aria-hidden="true" />{" "}
+                            <Sparkles className="size-4" aria-hidden="true" />{' '}
                             Un mot à découvrir
                         </p>
                         <p className="mt-5 font-display text-3xl font-semibold">
@@ -121,7 +154,7 @@ export default function Hero() {
                         <Check
                             className="size-4 text-primary"
                             aria-hidden="true"
-                        />{" "}
+                        />{' '}
                         Un pas après l’autre
                     </span>
                 </motion.div>
@@ -129,13 +162,18 @@ export default function Hero() {
                 <motion.div
                     initial={{ y: 0 }}
                     animate={floatingAnimation}
-                    transition={{ duration: 6.5, delay: -2, ease: "easeInOut", repeat: Infinity }}
+                    transition={{
+                        duration: 6.5,
+                        delay: -2,
+                        ease: 'easeInOut',
+                        repeat: Infinity,
+                    }}
                     style={{ rotate: 2 }}
                     className="pointer-events-none absolute top-2 -right-7 hidden w-64 text-left 2xl:block"
                 >
                     <Card variant="floating" className="gap-0 p-5">
                         <p className="flex items-center gap-2 text-xs font-bold tracking-wider text-primary uppercase">
-                            <BookOpen className="size-4" aria-hidden="true" />{" "}
+                            <BookOpen className="size-4" aria-hidden="true" />{' '}
                             Le mot du jour
                         </p>
                         <p className="mt-5 font-display text-3xl font-semibold">
@@ -150,7 +188,12 @@ export default function Hero() {
                 <motion.div
                     initial={{ y: 0 }}
                     animate={floatingAnimation}
-                    transition={{ duration: 6, delay: -4, ease: "easeInOut", repeat: Infinity }}
+                    transition={{
+                        duration: 6,
+                        delay: -4,
+                        ease: 'easeInOut',
+                        repeat: Infinity,
+                    }}
                     className="pointer-events-none absolute top-[390px] -left-2 hidden w-60 text-left 2xl:block"
                 >
                     <Card variant="floating" className="gap-0 p-5">
@@ -158,7 +201,7 @@ export default function Hero() {
                             <MessageCircle
                                 className="size-4 text-primary"
                                 aria-hidden="true"
-                            />{" "}
+                            />{' '}
                             Ose parler allemand
                         </p>
                         <p className="mt-3 text-sm text-muted-foreground">
@@ -170,7 +213,12 @@ export default function Hero() {
                 <motion.div
                     initial={{ y: 0 }}
                     animate={floatingAnimation}
-                    transition={{ duration: 7, delay: -1, ease: "easeInOut", repeat: Infinity }}
+                    transition={{
+                        duration: 7,
+                        delay: -1,
+                        ease: 'easeInOut',
+                        repeat: Infinity,
+                    }}
                     className="pointer-events-none absolute top-[390px] right-0 hidden w-60 text-left 2xl:block"
                 >
                     <Card variant="floating" className="gap-0 p-5">
@@ -178,7 +226,7 @@ export default function Hero() {
                             <GraduationCap
                                 className="size-4 text-primary"
                                 aria-hidden="true"
-                            />{" "}
+                            />{' '}
                             CharlesAcademy
                         </p>
                         <p className="mt-3 text-sm text-muted-foreground">

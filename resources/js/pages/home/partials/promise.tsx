@@ -1,27 +1,27 @@
-import { BookOpen, Languages, MessageCircle } from "lucide-react";
-import { Card } from "@/components/ui/card";
+import { BookOpen, Languages, MessageCircle } from 'lucide-react';
+import { Card } from '@/components/ui/card';
 
 const promises = [
     {
-        number: "01",
+        number: '01',
         icon: BookOpen,
-        title: "Grammaire",
+        title: 'Grammaire',
         description:
             "Comprends une règle dans une phrase, puis essaie de l'utiliser dans un nouvel exemple.",
     },
     {
-        number: "02",
+        number: '02',
         icon: Languages,
-        title: "Vocabulaire",
+        title: 'Vocabulaire',
         description:
-            "Découvre des mots utiles en contexte et réemploie-les pour parler de ce qui te concerne.",
+            'Découvre des mots utiles en contexte et réemploie-les pour parler de ce qui te concerne.',
     },
     {
-        number: "03",
+        number: '03',
         icon: MessageCircle,
-        title: "Expression orale",
+        title: 'Expression orale',
         description:
-            "Écoute, réponds à voix haute et gagne peu à peu en aisance dans les échanges.",
+            'Écoute, réponds à voix haute et gagne peu à peu en aisance dans les échanges.',
     },
 ] as const;
 
@@ -38,7 +38,7 @@ export default function PromiseSection() {
                         id="promise-heading"
                         className="mt-6 font-display text-5xl leading-[1.1] font-semibold tracking-tight text-balance text-foreground sm:text-6xl lg:text-7xl"
                     >
-                        Trois façons de{" "}
+                        Trois façons de{' '}
                         <span className="inline-block -rotate-2 rounded-xl bg-primary px-3 py-1 text-primary-foreground shadow-lg shadow-primary/15">
                             pratiquer.
                         </span>

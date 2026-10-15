@@ -1,15 +1,15 @@
-import { Link, usePage } from "@inertiajs/react";
-import { useEffect, useState } from "react";
+import { Link, usePage } from '@inertiajs/react';
+import { useEffect, useState } from 'react';
 
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import { dashboard, login, register } from "@/routes";
-import type { Auth } from "@/types";
+import { Button } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
+import { dashboard, login, register } from '@/routes';
+import type { Auth } from '@/types';
 
-import Logo from "./logo";
-import { MenuToggleIcon } from "./menu-toggle-icon";
-import ThemeToggle from "./ThemeToggle";
-import { useScroll } from "./use-scroll";
+import Logo from './logo';
+import { MenuToggleIcon } from './menu-toggle-icon';
+import ThemeToggle from './ThemeToggle';
+import { useScroll } from './use-scroll';
 
 export function Header() {
     const [open, setOpen] = useState(false);
@@ -25,22 +25,22 @@ export function Header() {
         }
 
         function closeOnEscape(event: KeyboardEvent) {
-            if (event.key === "Escape") {
+            if (event.key === 'Escape') {
                 setOpen(false);
             }
         }
 
-        document.addEventListener("keydown", closeOnEscape);
+        document.addEventListener('keydown', closeOnEscape);
 
-        return () => document.removeEventListener("keydown", closeOnEscape);
+        return () => document.removeEventListener('keydown', closeOnEscape);
     }, [open]);
 
     return (
         <header
             className={cn(
-                "sticky top-0 z-50 w-full border-b border-transparent transition-colors duration-300",
+                'sticky top-0 z-50 w-full border-b border-transparent transition-colors duration-300',
                 scrolled &&
-                    "border-border bg-background/95 backdrop-blur-lg supports-[backdrop-filter]:bg-background/85",
+                    'border-border bg-background/95 backdrop-blur-lg supports-[backdrop-filter]:bg-background/85',
             )}
         >
             <nav
@@ -83,10 +83,14 @@ export function Header() {
                         variant="outline"
                         aria-expanded={open}
                         aria-controls="mobile-account-menu"
-                        aria-label={open ? "Fermer le menu" : "Ouvrir le menu"}
+                        aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'}
                         onClick={() => setOpen((previous) => !previous)}
                     >
-                        <MenuToggleIcon open={open} className="size-5" duration={300} />
+                        <MenuToggleIcon
+                            open={open}
+                            className="size-5"
+                            duration={300}
+                        />
                     </Button>
                 </div>
             </nav>
@@ -99,19 +103,28 @@ export function Header() {
                     <div className="mx-auto flex max-w-[1600px] flex-col gap-2">
                         {auth.user ? (
                             <Button asChild>
-                                <Link href={dashboard()} onClick={() => setOpen(false)}>
+                                <Link
+                                    href={dashboard()}
+                                    onClick={() => setOpen(false)}
+                                >
                                     Mon espace
                                 </Link>
                             </Button>
                         ) : (
                             <>
                                 <Button asChild>
-                                    <Link href={register()} onClick={() => setOpen(false)}>
+                                    <Link
+                                        href={register()}
+                                        onClick={() => setOpen(false)}
+                                    >
                                         Créer un compte
                                     </Link>
                                 </Button>
                                 <Button variant="secondary" asChild>
-                                    <Link href={login()} onClick={() => setOpen(false)}>
+                                    <Link
+                                        href={login()}
+                                        onClick={() => setOpen(false)}
+                                    >
                                         Connexion
                                     </Link>
                                 </Button>

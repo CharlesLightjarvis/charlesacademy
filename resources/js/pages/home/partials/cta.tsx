@@ -1,8 +1,8 @@
-import { Link, usePage } from "@inertiajs/react";
-import { ArrowRight, ArrowUpRight, Check, Sparkles } from "lucide-react";
+import { Link, usePage } from '@inertiajs/react';
+import { ArrowRight, ArrowUpRight, Check, Sparkles } from 'lucide-react';
 
-import { dashboard, login, register } from "@/routes";
-import type { Auth } from "@/types";
+import { dashboard, login, register } from '@/routes';
+import type { Auth } from '@/types';
 
 export default function FinalCTA() {
     const { auth } = usePage<{ auth: Auth }>().props;
@@ -11,7 +11,7 @@ export default function FinalCTA() {
         <section
             id="commencer"
             aria-labelledby="final-cta-heading"
-            className=" px-4 py-12 sm:px-8 lg:py-20"
+            className="px-4 py-12 sm:px-8 lg:py-20"
         >
             <div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-[#038259] px-6 py-14 text-center text-white sm:rounded-[3rem] sm:px-12 sm:py-20 lg:px-20 lg:py-24">
                 {/* DECORATIVE TYPOGRAPHY */}
@@ -20,16 +20,16 @@ export default function FinalCTA() {
                     aria-hidden="true"
                     className="pointer-events-none absolute inset-0 overflow-hidden"
                 >
-                    <span className="absolute -left-16 top-4 -rotate-12 font-display text-[clamp(7rem,18vw,17rem)] font-semibold leading-none text-white/[0.045] select-none">
+                    <span className="absolute top-4 -left-16 -rotate-12 font-display text-[clamp(7rem,18vw,17rem)] leading-none font-semibold text-white/[0.045] select-none">
                         HALLO
                     </span>
 
-                    <span className="absolute -right-12 bottom-0 rotate-[-10deg] font-display text-[clamp(7rem,19vw,18rem)] font-semibold leading-none text-white/[0.045] select-none">
+                    <span className="absolute -right-12 bottom-0 rotate-[-10deg] font-display text-[clamp(7rem,19vw,18rem)] leading-none font-semibold text-white/[0.045] select-none">
                         LOS!
                     </span>
 
-                    <div className="absolute left-[10%] top-[20%] size-2 rounded-full bg-white/30" />
-                    <div className="absolute right-[12%] top-[25%] size-3 rounded-full border border-white/30" />
+                    <div className="absolute top-[20%] left-[10%] size-2 rounded-full bg-white/30" />
+                    <div className="absolute top-[25%] right-[12%] size-3 rounded-full border border-white/30" />
                     <div className="absolute bottom-[22%] left-[17%] size-2 rounded-full border border-white/30" />
                 </div>
 
@@ -56,9 +56,9 @@ export default function FinalCTA() {
 
                     <h2
                         id="final-cta-heading"
-                        className="mx-auto mt-5 max-w-5xl font-display text-[clamp(2.7rem,7vw,6.5rem)] font-semibold leading-[1.05] tracking-tight text-balance"
+                        className="mx-auto mt-5 max-w-5xl font-display text-[clamp(2.7rem,7vw,6.5rem)] leading-[1.05] font-semibold tracking-tight text-balance"
                     >
-                        Prêt à essayer{" "}
+                        Prêt à essayer{' '}
                         <span className="relative inline-block">
                             en allemand ?
                             <svg
@@ -92,7 +92,9 @@ export default function FinalCTA() {
                             href={auth.user ? dashboard() : register()}
                             className="group inline-flex min-h-14 w-full items-center justify-center gap-3 rounded-full bg-white px-8 py-4 text-base font-bold text-[#038259] shadow-xl shadow-black/10 transition-all duration-300 hover:-translate-y-1 hover:bg-[#E8F7EE] hover:shadow-2xl active:translate-y-0 motion-reduce:transform-none sm:w-auto"
                         >
-                            {auth.user ? "Accéder à mon espace" : "Créer mon compte"}
+                            {auth.user
+                                ? 'Accéder à mon espace'
+                                : 'Créer mon compte'}
 
                             <ArrowRight className="size-5 transition-transform group-hover:translate-x-1" />
                         </Link>
@@ -112,9 +114,9 @@ export default function FinalCTA() {
 
                     <div className="mt-9 flex flex-wrap items-center justify-center gap-x-7 gap-y-3">
                         {[
-                            "Une approche progressive",
-                            "Des exemples concrets",
-                            "Un apprentissage à ton rythme",
+                            'Une approche progressive',
+                            'Des exemples concrets',
+                            'Un apprentissage à ton rythme',
                         ].map((item) => (
                             <span
                                 key={item}
